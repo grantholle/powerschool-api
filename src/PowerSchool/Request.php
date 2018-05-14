@@ -49,14 +49,35 @@ class Request
     /**
      * Makes an api call to PowerSchool
      *
-     * @param string $endpoint The api endpoint to call
      * @param string $method The HTTP method to use
+     * @param string $endpoint The api endpoint to call
      * @param Array $options The HTTP options
      * @return void
      */
-    public function makeRequest(string $endpoint)
+    public function makeRequest(string $method, string $endpoint, Array $options)
     {
-        // If the response is an expired token, reauthenticate
+        if (!isset($options['headers'])) {
+            $options['headers'] = [];
+        }
+
+        // Force json
+        $options['headers']['Accept'] = 'application/json';
+        $options['headers']['Content-Type'] = 'application/json';
+
+        $response = $this->client->request($method, $endpoint, $options);
+
+        // If the response is an expired token, reauthenticate and try again
+        if ($res->getStatusCode() === 401) {
+            $wwwHeader = $response->getHeader('WWW-Authenticate');
+
+            if (strpos($wwwHeader, 'expired') !== false) {
+                return $this->authenticate(true)->request($method, $endpoint, $options);
+            }
+        }
+
+        $body = $response->getBody();
+
+        return json_decode($body->getContents());
     }
 
     /**
