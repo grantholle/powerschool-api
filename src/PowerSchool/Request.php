@@ -153,7 +153,7 @@ class Request
      */
     public function authenticate(bool $force = false)
     {
-        // Check if there is already a token and we're not forcing retrieving one
+        // Check if there is already a token and we're not doing a force-retrieval
         if (!$force && $this->authToken) {
             return $this;
         }
