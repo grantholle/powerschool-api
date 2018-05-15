@@ -9,13 +9,28 @@ use PowerSchool\Exception\MissingClientCredentialsException;
 
 class Request
 {
+    /* @var string */
     private const AUTH_TOKEN = 'authToken';
+
+    /* @var string */
     private const CLIENT_ID = 'clientId';
+
+    /* @var string */
     private const CLIENT_SECRET = 'clientSecret';
+
+    /* @var GuzzleHttp\Client */
     private $client;
+
+    /* @var Symfony\Component\Cache\Simple\FilesystemCache */
     private $cache;
+
+    /* @var string */
     private $clientId;
+
+    /* @var string */
     private $clientSecret;
+
+    /* @var string */
     private $authToken;
 
     /**
