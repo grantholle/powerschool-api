@@ -6,6 +6,7 @@ use PowerSchool\Exception;
 use GuzzleHttp\Client;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use PowerSchool\Exception\MissingClientCredentialsException;
+use PowerSchool\Exception\MissingServerAddressException;
 
 class Request
 {
@@ -40,10 +41,15 @@ class Request
      * @param string $clientId Optional if already cached. The client id obtained from installing a plugin with oauth enabled
      * @param string $clientSecret Optional if already cached. The client secret obtained from installing a plugin with oauth enabled
      */
-    public function __construct(string $serverAddress, string $clientId = null, string $clientSecret = null)
+    public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null)
     {
-        $this->client = new Client(['base_uri' => $serverAddress]);
         $this->cache = new FilesystemCache();
+
+        if (is_null($serverAddress)) {
+            throw new MissingServerAddressException('No server address was configured');
+        }
+
+        $this->client = new Client(['base_uri' => $serverAddress]);
 
         // Cache the client id and secret in case they aren't included
         if ($clientId) {
