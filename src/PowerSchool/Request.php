@@ -99,9 +99,7 @@ class Request
             }
         }
 
-        $body = $response->getBody();
-
-        return json_decode($body->getContents());
+        return json_decode($response->getBody()->getContents());
     }
 
     /**
@@ -178,7 +176,7 @@ class Request
             'body' => 'grant_type=client_credentials'
         ]);
 
-        $json = json_decode((string)$response->getBody());
+        $json = json_decode($response->getBody()->getContents());
 
         // Set and cache the auth token
         $this->authToken = $json->access_token;
