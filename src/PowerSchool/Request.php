@@ -65,6 +65,7 @@ class Request
         }
 
         $this->authToken = $this->cache->get(self::AUTH_TOKEN, false);
+        $this->authenticate();
     }
 
     /**
