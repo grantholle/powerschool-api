@@ -85,6 +85,9 @@ class Request
         $options['headers']['Accept'] = 'application/json';
         $options['headers']['Content-Type'] = 'application/json';
 
+        // Add the auth token for the header
+        $options['headers']['Authorization'] = 'Bearer ' . $this->authToken;
+
         $response = $this->client->request($method, $endpoint, $options);
 
         // If the response is an expired token, reauthenticate and try again
