@@ -3,6 +3,7 @@
     "description": "A php package to make interacting with PowerSchool less painful.",
     "keywords": ["powerschool"],
     "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Grant Holle"
@@ -33,6 +34,12 @@
         },
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/grantholle/powerschool-api"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [
