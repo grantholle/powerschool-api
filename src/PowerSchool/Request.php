@@ -73,7 +73,7 @@ class Request
      * @param string $method The HTTP method to use
      * @param string $endpoint The api endpoint to call
      * @param Array $options The HTTP options
-     * @return void
+     * @return Array
      */
     public function makeRequest(string $method, string $endpoint, Array $options)
     {
