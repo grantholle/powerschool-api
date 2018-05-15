@@ -1,8 +1,13 @@
 {
     "name": "grantholle/powerschool-api",
-    "description": "A boilerplate for new composer based PHP projects.",
+    "description": "A php package to make interacting with PowerSchool less painful.",
     "keywords": ["powerschool"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Grant Holle"
+        }
+    ],
     "require": {
         "php": "^7.0",
         "guzzlehttp/guzzle": "^6.3",
@@ -27,5 +32,15 @@
             "php": "7.1"
         },
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PowerSchool\\PowerSchoolServiceProvider"
+            ],
+            "aliases": {
+                "RequestBuilder": "PowerSchool\\Api\\RequestBuilder"
+            }
+        }
     }
 }
