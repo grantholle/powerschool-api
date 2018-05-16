@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Vendor\\Package\\": "src"
+            "PowerSchool\\": "src"
         }
     },
     "autoload-dev": {
@@ -34,12 +34,6 @@
         },
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/grantholle/powerschool-api"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
