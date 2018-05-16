@@ -126,9 +126,38 @@ class RequestBuilder {
     }
 
     /**
+     * Configures the request to be a core resource with optional method and data that
+     * will send the request automatically.
+     *
+     * @param string $endpoint
+     * @param string $method
+     * @param Array $data
+     * @return void
+     */
+    public function resource(string $endpoint, string $method = null, Array $data = [])
+    {
+        $this->endpoint = $endpoint;
+
+        if (!is_null($method)) {
+            $this->method = $method;
+        }
+
+        if (!empty($data)) {
+            $this->data = $data;
+        }
+
+        // If the method and data are set, automatically send the request
+        if (!is_null($method) && !empty($data)) {
+            return $this->send();
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the endpoint to the named query
      *
-     * @param string $query
+     * @param string $query The named query name (com.organization.product.area.name)
      * @param Array $data
      * @return Mixed
      */
@@ -148,7 +177,7 @@ class RequestBuilder {
     /**
      * Alias for setNamedQuery()
      *
-     * @param string $query
+     * @param string $query The named query name (com.organization.product.area.name)
      * @param Array $data
      * @return Mixed
      */
@@ -160,7 +189,7 @@ class RequestBuilder {
     /**
      * Alias for setNamedQuery()
      *
-     * @param string $query
+     * @param string $query The named query name (com.organization.product.area.name)
      * @param Array $data
      * @return Mixed
      */
@@ -172,7 +201,7 @@ class RequestBuilder {
     /**
      * Alias for setNamedQuery()
      *
-     * @param string $query
+     * @param string $query The named query name (com.organization.product.area.name)
      * @param Array $data
      * @return Mixed
      */
