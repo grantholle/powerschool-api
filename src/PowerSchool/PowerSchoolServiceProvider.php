@@ -33,9 +33,13 @@ class PowerSchoolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Publish the configuration
         $this->publishes([
             __DIR__ . '/config/powerschool.php' => config_path('powerschool.php'),
         ]);
+
+        // Load routes
+        $this->loadRoutesFrom(__DIR__ . '/routes');
     }
 
     /**
