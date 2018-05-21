@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^7.0",
+        "brotzka/laravel-dotenv-editor": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/support": "^5.5",
         "symfony/cache": "^3.4"
