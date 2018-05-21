@@ -39,7 +39,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
         ]);
 
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/routes');
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
     }
 
     /**
