@@ -216,7 +216,7 @@ class RequestBuilder {
      * @param Array $data
      * @return $this
      */
-    public function withData(Array $data)
+    public function setData(Array $data)
     {
         $this->data = $data;
 
@@ -224,14 +224,25 @@ class RequestBuilder {
     }
 
     /**
-     * Alias for withData()
+     * Alias for setData()
+     *
+     * @param Array $data
+     * @return $this
+     */
+    public function withData(Array $data)
+    {
+        return $this->setData($data);
+    }
+
+    /**
+     * Alias for setData()
      *
      * @param Array $data
      * @return $this
      */
     public function with(Array $data)
     {
-        return $this->withData($data);
+        return $this->setData($data);
     }
 
     /**
