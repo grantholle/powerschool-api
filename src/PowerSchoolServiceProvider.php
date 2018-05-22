@@ -4,6 +4,7 @@ namespace GrantHolle\PowerSchool;
 
 use Illuminate\Support\ServiceProvider;
 use PowerSchool\Api\RequestBuilder;
+use GrantHolle\PowerSchool\Commands\ClearCache;
 
 class PowerSchoolServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,13 @@ class PowerSchoolServiceProvider extends ServiceProvider
 
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
+
+        // Commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ClearCache::class,
+            ]);
+        }
     }
 
     /**

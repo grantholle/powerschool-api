@@ -29,9 +29,11 @@ class ClearCache extends Command
      */
     private $cache;
 
-    public function __construct()
+    public function __construct(FilesystemCache $cache)
     {
-        $this->cache = new FilesystemCache();
+        parent::__construct();
+
+        $this->cache = $cache;
     }
 
     /**
