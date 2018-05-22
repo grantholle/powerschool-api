@@ -44,5 +44,6 @@ class ClearCache extends Command
     public function handle()
     {
         $this->cache->deleteItem(Request::AUTH_TOKEN);
+        $this->info('Auth token cache cleared!');
     }
 }
