@@ -11,13 +11,13 @@ use GrantHolle\PowerSchool\Exception\MissingServerAddressException;
 class Request
 {
     /* @var string */
-    private const AUTH_TOKEN = 'authToken';
+    public const AUTH_TOKEN = 'authToken';
 
     /* @var string */
-    private const CLIENT_ID = 'clientId';
+    public const CLIENT_ID = 'clientId';
 
     /* @var string */
-    private const CLIENT_SECRET = 'clientSecret';
+    public const CLIENT_SECRET = 'clientSecret';
 
     /* @var GuzzleHttp\Client */
     private $client;
