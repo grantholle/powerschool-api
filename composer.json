@@ -45,7 +45,7 @@
                 "GrantHolle\\PowerSchool\\PowerSchoolServiceProvider"
             ],
             "aliases": {
-                "RequestBuilder": "GrantHolle\\PowerSchool\\Api\\RequestBuilder"
+                "PS": "GrantHolle\\PowerSchool\\Api\\RequestBuilder"
             }
         }
     }
