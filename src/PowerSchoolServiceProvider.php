@@ -36,7 +36,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
         // Publish the configuration
         $this->publishes([
             __DIR__ . '/config.php' => config_path('powerschool.php'),
-        ]);
+        ], 'config');
 
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
