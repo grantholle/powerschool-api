@@ -224,6 +224,17 @@ class RequestBuilder {
     }
 
     /**
+     * Alias for withData()
+     *
+     * @param Array $data
+     * @return $this
+     */
+    public function with(Array $data)
+    {
+        return $this->withData($data);
+    }
+
+    /**
      * Sets the query string for get requests
      *
      * @param Mixed $queryString
