@@ -92,7 +92,7 @@ class Request
         $response = $this->client->request($method, $endpoint, $options);
 
         // If the response is an expired token, reauthenticate and try again
-        if ($res->getStatusCode() === 401) {
+        if ($response->getStatusCode() === 401) {
             $wwwHeader = $response->getHeader('WWW-Authenticate');
 
             if (strpos($wwwHeader, 'expired') !== false) {
