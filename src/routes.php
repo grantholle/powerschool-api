@@ -12,13 +12,8 @@
 | and send back a successful response.
 |
  */
-Route::post('/powerschool-registration', function () {
-    // {
-    //     "credentials" : {
-    //         "client_secret" :"3260cf45-41c3-4f16-b8e3-8b120a4afc54" ,
-    //             "client_id" : "66fc77ee-359b-4f15-971e-8bd5d3e83fd7"
-    //     },
-    //         "verify_url" :"https://applegrove.com/ws/v1/time" ,
-    //         "callback_data" : "License Key"
-    // }
+Route::post('/powerschool/registration', function () {
+    $env = new \Brotzka\DotenvEditor\DotenvEditor();
+
+    return $env->keyExists('POWERSCHOOL_ADDRESS');
 });

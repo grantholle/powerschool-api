@@ -1,8 +1,8 @@
 <?php
 
-namespace PowerSchool\Api;
+namespace GrantHolle\PowerSchool\Api;
 
-use PowerSchool\Request;
+use GrantHolle\PowerSchool\Request;
 
 class RequestBuilder {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PowerSchool;
+namespace GrantHolle\PowerSchool;
 
 use Illuminate\Support\ServiceProvider;
 use PowerSchool\Api\RequestBuilder;

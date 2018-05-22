@@ -6,7 +6,9 @@
     "version": "1.0.0",
     "authors": [
         {
-            "name": "Grant Holle"
+            "name": "Grant Holle",
+            "homepage": "http://grantholle.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -21,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "PowerSchool\\": "src"
+            "GrantHolle\\PowerSchool\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vendor\\Package\\": "tests"
+            "GrantHolle\\PowerSchool\\Tests\\": "tests"
         }
     },
     "config": {
@@ -35,13 +37,16 @@
         },
         "sort-packages": true
     },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
     "extra": {
         "laravel": {
             "providers": [
-                "PowerSchool\\PowerSchoolServiceProvider"
+                "GrantHolle\\PowerSchool\\PowerSchoolServiceProvider"
             ],
             "aliases": {
-                "RequestBuilder": "PowerSchool\\Api\\RequestBuilder"
+                "RequestBuilder": "GrantHolle\\PowerSchool\\Api\\RequestBuilder"
             }
         }
     }

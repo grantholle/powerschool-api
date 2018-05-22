@@ -1,12 +1,12 @@
 <?php
 
-namespace PowerSchool;
+namespace GrantHolle\PowerSchool;
 
-use PowerSchool\Exception;
+use GrantHolle\PowerSchool\Exception;
 use GuzzleHttp\Client;
 use Symfony\Component\Cache\Simple\FilesystemCache;
-use PowerSchool\Exception\MissingClientCredentialsException;
-use PowerSchool\Exception\MissingServerAddressException;
+use GrantHolle\PowerSchool\Exception\MissingClientCredentialsException;
+use GrantHolle\PowerSchool\Exception\MissingServerAddressException;
 
 class Request
 {

@@ -1,5 +1,5 @@
 <?php
 
-namespace PowerSchool\Exception;
+namespace GrantHolle\PowerSchool\Exception;
 
 class MissingServerAddressException extends \Exception {}

@@ -1,9 +1,9 @@
 <?php
 
-namespace PowerSchool;
+namespace GrantHolle\PowerSchool;
 
 use Illuminate\Support\Facades\Facade;
-use PowerSchool\Api\RequestBuilder;
+use GrantHolle\PowerSchool\Api\RequestBuilder;
 
 class PowerSchool extends Facade
 {
