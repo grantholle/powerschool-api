@@ -268,6 +268,17 @@ class RequestBuilder {
     }
 
     /**
+     * Checks to see if a query variable has been set
+     *
+     * @param string $key
+     * @return boolean
+     */
+    public function hasQueryVar(string $key)
+    {
+        return !empty($this->queryString[$key]);
+    }
+
+    /**
      * Syntactic sugar for the q query string var
      *
      * @param string $query
@@ -339,11 +350,17 @@ class RequestBuilder {
         $this->buildRequestJson();
 
         // Build the query by hand
-        if ($this->method === 'get' && !is_empty($this->queryString)) {
+        if ($this->method === 'get') {
             $this->options['query'] = '';
 
+            // Build the query string
             foreach ($this->queryString as $var => $val) {
                 $this->options['query'] .= $var . '=' . $val . '&';
+            }
+
+            // Get requests are required to have a projection parameter
+            if (!$this->hasQueryVar('projection')) {
+                $this->options['query'] .= 'projection=*&';
             }
 
             $this->options['query'] = substr($this->options['query'], 0, -1);
