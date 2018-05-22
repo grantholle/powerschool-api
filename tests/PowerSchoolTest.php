@@ -21,8 +21,8 @@ class PowerSchoolTest extends TestCase
     /** @test */
     public function test_can_get_table_entries()
     {
-        $response = $this->builder->table('u_isc_passport_entries')->get();
+        $response = $this->builder->table(getenv('TABLE'))->get();
 
-        dd($response);
+        $this->assertObjectHasAttribute('record', $response);
     }
 }
