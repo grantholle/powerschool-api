@@ -11,9 +11,10 @@ class PowerSchoolTest extends TestCase
 
     public function setUp()
     {
-        parent::setUp();
+        $dotenv = new Dotenv\Dotenv(__DIR__);
+        $dotenv->load();
 
-        $this->builder = new RequestBuilder('https://pstest.intlschools.net/', 'd374d27f-97ff-485a-b54d-a8b3acdda38c', 'd26b9711-d892-4129-881a-5f6b86d6ccbb');
+        $this->builder = new RequestBuilder(getenv('SERVER'), getenv('CLIENT_ID'), getenv('CLIENT_SECRET'));
     }
 
     /** @test */
