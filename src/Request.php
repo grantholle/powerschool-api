@@ -46,7 +46,7 @@ class Request
         $this->cache = new FilesystemCache();
 
         if (is_null($serverAddress)) {
-            throw new MissingServerAddressException('No server address was configured');
+            throw new MissingServerAddressException('No PowerSchool server address has been configured');
         }
 
         $this->client = new Client(['base_uri' => $serverAddress]);
