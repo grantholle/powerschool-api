@@ -3,7 +3,7 @@
 namespace GrantHolle\PowerSchool;
 
 use Illuminate\Support\ServiceProvider;
-use PowerSchool\Api\RequestBuilder;
+use GrantHolle\PowerSchool\Api\RequestBuilder;
 use GrantHolle\PowerSchool\Commands\ClearCache;
 
 class PowerSchoolServiceProvider extends ServiceProvider
