@@ -20,7 +20,7 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $description = 'Clears any tokens and settings cached.';
+    protected $description = 'Removes existing authorization token cache.';
 
     /**
      * The cache object
