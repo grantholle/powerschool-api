@@ -89,6 +89,9 @@ class Request
         // Add the auth token for the header
         $options['headers']['Authorization'] = 'Bearer ' . $this->authToken;
 
+        // Don't throw exceptions for 4xx and 5xx errors
+        $options['http_errors'] = false;
+
         $response = $this->client->request($method, $endpoint, $options);
 
         // If the response is an expired token, reauthenticate and try again
@@ -100,7 +103,9 @@ class Request
             }
         }
 
-        return json_decode($response->getBody()->getContents());
+        $body = json_decode($response->getBody()->getContents());
+
+        return response()->json($body, $response->getStatusCode());
     }
 
     /**
