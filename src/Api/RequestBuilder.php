@@ -212,13 +212,34 @@ class RequestBuilder {
 
     /**
      * Sets the data for the post/put/patch requests
+     * Also performs basic sanitation for PS, such
+     * as boolean translation
      *
      * @param Array $data
      * @return $this
      */
     public function setData(Array $data)
     {
-        $this->data = $data;
+        $sanitized = [];
+
+        foreach ($data as $key => $value) {
+            // If it's null don't include it with the request
+            if (is_null($value)) {
+                continue;
+            }
+
+            // If the type is a boolean, set it to the
+            // integer type that PS uses, 1 or 0
+            if (gettype($value) === 'boolean') {
+                $value = $value ? '1' : '0';
+            }
+
+            // Cast everything as a string, otherwise PS
+            // with throw a typecast error or something
+            $sanitized[$key] = (string)$value;
+        }
+
+        $this->data = $sanitized;
 
         return $this;
     }
