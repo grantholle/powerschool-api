@@ -132,7 +132,7 @@ class RequestBuilder {
      * @param string $endpoint
      * @param string $method
      * @param Array $data
-     * @return void
+     * @return $this
      */
     public function resource(string $endpoint, string $method = null, Array $data = [])
     {
@@ -152,6 +152,30 @@ class RequestBuilder {
         }
 
         return $this;
+    }
+
+    /**
+     * Sets the endpoint for the request
+     *
+     * @param string $endpoint
+     * @return $this
+     */
+    public function setEndpoint(string $endpoint)
+    {
+        $this->endpoint = $endpoint;
+
+        return $this;
+    }
+
+    /**
+     * Alias for setEndpoint()
+     *
+     * @param string $endpoint
+     * @return $this
+     */
+    public function toEndpoint(string $endpoint)
+    {
+        return $this->setEndpoint($endpoint);
     }
 
     /**
