@@ -74,9 +74,10 @@ class Request
      * @param string $method The HTTP method to use
      * @param string $endpoint The api endpoint to call
      * @param Array $options The HTTP options
+     * @param bool $returnResponse Return a response or just decoded
      * @return Array
      */
-    public function makeRequest(string $method, string $endpoint, Array $options)
+    public function makeRequest(string $method, string $endpoint, Array $options, bool $returnResponse)
     {
         if (!isset($options['headers'])) {
             $options['headers'] = [];
@@ -105,7 +106,11 @@ class Request
 
         $body = json_decode($response->getBody()->getContents());
 
-        return response()->json($body, $response->getStatusCode());
+        if ($returnResponse) {
+            return response()->json($body, $response->getStatusCode());
+        }
+
+        return $body;
     }
 
     /**

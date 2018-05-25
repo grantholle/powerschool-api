@@ -33,6 +33,9 @@ class RequestBuilder {
     /* @var bool */
     private $includeProjection = true;
 
+    /* @var bool */
+    private $asResponse = true;
+
     /**
      * Constructor
      *
@@ -395,6 +398,18 @@ class RequestBuilder {
     }
 
     /**
+     * Sets a flag to return as a decoded json rather than an Illuminate\Response
+     *
+     * @return $this
+     */
+    public function raw()
+    {
+        $this->asResponse = false;
+
+        return $this;
+    }
+
+    /**
      * Builds the dumb request structure for PowerSchool table queries
      *
      * @return void
@@ -451,7 +466,7 @@ class RequestBuilder {
             }
         }
 
-        return $this->request->makeRequest($this->method, $this->endpoint, $this->options);
+        return $this->request->makeRequest($this->method, $this->endpoint, $this->options, $this->asResponse);
     }
 
     /**
