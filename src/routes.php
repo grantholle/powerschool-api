@@ -12,8 +12,5 @@
 | and send back a successful response.
 |
  */
-Route::post('/powerschool/registration', function () {
-    $env = new \Brotzka\DotenvEditor\DotenvEditor();
 
-    return $env->keyExists('POWERSCHOOL_ADDRESS');
-});
+Route::post('/powerschool/registration', 'GrantHolle\PowerSchool\Controllers\RegisterController@register');

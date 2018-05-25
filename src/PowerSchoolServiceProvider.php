@@ -40,7 +40,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
         ], 'config');
 
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
+        // $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
         // Commands
         if ($this->app->runningInConsole()) {
