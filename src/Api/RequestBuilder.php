@@ -30,6 +30,9 @@ class RequestBuilder {
     /* @var string */
     private $id;
 
+    /* @var bool */
+    private $includeProjection = true;
+
     /**
      * Constructor
      *
@@ -137,6 +140,7 @@ class RequestBuilder {
     public function resource(string $endpoint, string $method = null, Array $data = [])
     {
         $this->endpoint = $endpoint;
+        $this->includeProjection = false;
 
         if (!is_null($method)) {
             $this->method = $method;
@@ -150,6 +154,18 @@ class RequestBuilder {
         if (!is_null($this->method) && !empty($this->data)) {
             return $this->send();
         }
+
+        return $this;
+    }
+
+    /**
+     * Does not force a projection parameter for GET requests
+     *
+     * @return $this
+     */
+    public function excludeProjection()
+    {
+        $this->includeProjection = false;
 
         return $this;
     }
@@ -426,7 +442,7 @@ class RequestBuilder {
             }
 
             // Get requests are required to have a projection parameter
-            if (!$this->hasQueryVar('projection')) {
+            if (!$this->hasQueryVar('projection') && $this->includeProjection) {
                 $this->options['query'] .= 'projection=*&';
             }
 
