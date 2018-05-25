@@ -446,7 +446,9 @@ class RequestBuilder {
                 $this->options['query'] .= 'projection=*&';
             }
 
-            $this->options['query'] = substr($this->options['query'], 0, -1);
+            if (!empty($this->options['query'])) {
+                $this->options['query'] = substr($this->options['query'], 0, -1);
+            }
         }
 
         return $this->request->makeRequest($this->method, $this->endpoint, $this->options);
