@@ -147,7 +147,7 @@ class RequestBuilder {
         }
 
         // If the method and data are set, automatically send the request
-        if (!is_null($method) && !empty($data)) {
+        if (!is_null($this->method) && !empty($this->data)) {
             return $this->send();
         }
 
