@@ -11,6 +11,6 @@
 | Here we'll get the client ID and secret, cache the access_token
 | and send back a successful response.
 |
- */
+*/
 
 Route::post('/powerschool/registration', 'GrantHolle\PowerSchool\Controllers\RegisterController@register');
