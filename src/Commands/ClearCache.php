@@ -13,7 +13,7 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $signature = 'powerschoool:clear';
+    protected $signature = 'powerschool:clear';
 
     /**
      * The console command description.
