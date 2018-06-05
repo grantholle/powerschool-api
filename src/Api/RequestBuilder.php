@@ -263,12 +263,10 @@ class RequestBuilder {
      */
     public function setData(Array $data)
     {
-        $sanitized = [];
-
         foreach ($data as $key => $value) {
-            // If it's null don't include it with the request
+            // If it's null set the value to an empty string
             if (is_null($value)) {
-                continue;
+                $value = '';
             }
 
             // If the type is a boolean, set it to the
@@ -279,10 +277,8 @@ class RequestBuilder {
 
             // Cast everything as a string, otherwise PS
             // with throw a typecast error or something
-            $sanitized[$key] = (string)$value;
+            $this->data[$key] = (string)$value;
         }
-
-        $this->data = $sanitized;
 
         return $this;
     }
