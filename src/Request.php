@@ -99,7 +99,7 @@ class Request
         if ($response->getStatusCode() === 401) {
             $wwwHeader = $response->getHeader('WWW-Authenticate');
 
-            if (strpos($wwwHeader, 'expired') !== false) {
+            if (strpos($wwwHeader[0], 'expired') !== false) {
                 return $this->authenticate(true)->request($method, $endpoint, $options);
             }
         }
