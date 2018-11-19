@@ -150,7 +150,7 @@ class RequestBuilder {
         }
 
         if (!empty($data)) {
-            $this->data = $data;
+            $this->setData($data);
         }
 
         // If the method and data are set, automatically send the request
@@ -254,16 +254,19 @@ class RequestBuilder {
     }
 
     /**
-     * Sets the data for the post/put/patch requests
-     * Also performs basic sanitation for PS, such
-     * as boolean translation
+     * Casts all the values recursively as a string
      *
-     * @param Array $data
-     * @return $this
+     * @param array $data
+     * @return void
      */
-    public function setData(Array $data)
-    {
+    function castToValuesString(array $data) {
         foreach ($data as $key => $value) {
+            // Recursively set the nested array values
+            if (is_array($value)) {
+                $data[$key] = $this->castToValuesString($value);
+                continue;
+            }
+
             // If it's null set the value to an empty string
             if (is_null($value)) {
                 $value = '';
@@ -277,8 +280,23 @@ class RequestBuilder {
 
             // Cast everything as a string, otherwise PS
             // with throw a typecast error or something
-            $this->data[$key] = (string)$value;
+            $data[$key] = (string)$value;
         }
+
+        return $data;
+    }
+
+    /**
+     * Sets the data for the post/put/patch requests
+     * Also performs basic sanitation for PS, such
+     * as boolean translation
+     *
+     * @param Array $data
+     * @return $this
+     */
+    public function setData(Array $data)
+    {
+        $this->data = $this->castToValuesString($data);
 
         return $this;
     }
