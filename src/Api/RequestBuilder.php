@@ -49,6 +49,24 @@ class RequestBuilder {
     }
 
     /**
+     * Cleans all the variables for the next request
+     *
+     * @return void
+     */
+    public function freshen()
+    {
+        $this->endpoint = null;
+        $this->method = null;
+        $this->options = [];
+        $this->data = null;
+        $this->table = null;
+        $this->queryString = [];
+        $this->id = null;
+        $this->includeProjection = true;
+        $this->asResponse = true;
+    }
+
+    /**
      * Sets the table for a request against a custom table
      *
      * @param string $table
@@ -480,7 +498,11 @@ class RequestBuilder {
             }
         }
 
-        return $this->request->makeRequest($this->method, $this->endpoint, $this->options, $this->asResponse);
+        $response = $this->request->makeRequest($this->method, $this->endpoint, $this->options, $this->asResponse);
+
+        $this->freshen();
+
+        return $response;
     }
 
     /**
