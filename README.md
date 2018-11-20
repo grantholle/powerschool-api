@@ -110,3 +110,17 @@ $request = PS::powerQuery('com.organization.product.area.name');
 // Gets posted automatically
 $response = PS::powerQuery('com.organization.product.area.name', ['schoolid' => '100']);
 ```
+
+### `setEndpoint(string $query)`
+
+_Aliases: toEndpoint()_
+
+Sets the endpoint for core PS resources.
+
+```php
+// Will not get sent
+$request = PS::powerQuery('com.organization.product.area.name');
+
+// Gets posted automatically
+$response = PS::powerQuery('com.organization.product.area.name', ['schoolid' => '100']);
+```
