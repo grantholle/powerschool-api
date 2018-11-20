@@ -22,7 +22,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(RequestBuilder::class, function($app) {
+        $this->app->bind(RequestBuilder::class, function($app) {
             return new RequestBuilder(config('powerschool.server_address'), config('powerschool.client_id'), config('powerschool.client_secret'));
         });
     }
