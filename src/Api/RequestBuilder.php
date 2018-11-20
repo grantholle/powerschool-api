@@ -452,9 +452,8 @@ class RequestBuilder {
             return;
         }
 
-        if (!isset($this->options['json'])) {
-            $this->options['json'] = [];
-        }
+        // Reset the json object from previous requests
+        $this->options['json'] = [];
 
         if ($this->table) {
             $this->options['json']['tables'] = [$this->table => $this->data];
