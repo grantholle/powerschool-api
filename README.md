@@ -129,8 +129,8 @@ $requestData = [
         'last_name' => 'Doe',
       ],
       'demographics' => [
-        'gender' => $student['gender'],
-        'birth_date' => $student['dob'],
+        'gender' => 'M',
+        'birth_date' => '2002-08-01',
       ],
       'school_enrollment' => [
         'entry_date' => now()->format('Y-m-d'),
