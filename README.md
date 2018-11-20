@@ -118,9 +118,29 @@ _Aliases: toEndpoint()_
 Sets the endpoint for core PS resources.
 
 ```php
-// Will not get sent
-$request = PS::powerQuery('com.organization.product.area.name');
+$requestData = [
+  'students' => [
+    'student' => [
+      'client_uid' => 100,
+      'action' => 'INSERT',
+      'local_id' => 100,
+      'name' => [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+      ],
+      'demographics' => [
+        'gender' => $student['gender'],
+        'birth_date' => $student['dob'],
+      ],
+      'school_enrollment' => [
+        'entry_date' => now()->format('Y-m-d'),
+        'exit_date' => now()->subDays(1)->format('Y-m-d'),
+        'grade_level' => 10,
+        'school_number' => 100,
+      ],
+    ],
+  ],
+];
 
-// Gets posted automatically
-$response = PS::powerQuery('com.organization.product.area.name', ['schoolid' => '100']);
+$response = PS::toEndpoint('/ws/v1/student')->with($requestData)->post();
 ```
