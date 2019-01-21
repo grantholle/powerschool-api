@@ -498,7 +498,7 @@ class RequestBuilder {
         $this->buildRequestJson();
 
         // Build the query by hand
-        if ($this->method === 'get') {
+        if ($this->method === 'get' || $this->method === 'post') {
             $this->options['query'] = '';
 
             // Build the query string
@@ -507,7 +507,7 @@ class RequestBuilder {
             }
 
             // Get requests are required to have a projection parameter
-            if (!$this->hasQueryVar('projection') && $this->includeProjection) {
+            if (!$this->hasQueryVar('projection') && $this->includeProjection && $this->method === 'get') {
                 $this->options['query'] .= 'projection=*&';
             }
 
