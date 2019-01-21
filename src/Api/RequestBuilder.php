@@ -232,7 +232,7 @@ class RequestBuilder {
             return $this->withData($data)->post();
         }
 
-        return $this;
+        return $this->setMethod('post');
     }
 
     /**
