@@ -467,6 +467,11 @@ class RequestBuilder {
         if ($this->data && !$this->table) {
             $this->options['json'] = $this->data;
         }
+
+        // Remove the json option if there is nothing there
+        if (count($this->options['json']) === 0) {
+            unset($this->options['json']);
+        }
     }
 
     /**
