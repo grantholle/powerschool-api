@@ -430,6 +430,20 @@ class RequestBuilder {
     }
 
     /**
+     * Sends a count request to the table api
+     *
+     * @param integer $pagesize
+     * @return mixed
+     */
+    public function count()
+    {
+        $this->endpoint .= '/count';
+        $this->includeProjection = false;
+
+        return $this->get();
+    }
+
+    /**
      * Sets a flag to return as a decoded json rather than an Illuminate\Response
      *
      * @return $this
