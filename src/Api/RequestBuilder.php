@@ -375,10 +375,10 @@ class RequestBuilder {
      * Adds a variable to the query string array
      *
      * @param string $key
-     * @param string $val
+     * @param mixed $val
      * @return $this
      */
-    public function addQueryVar(string $key, string $val)
+    public function addQueryVar(string $key, $val)
     {
         $this->queryString[$key] = $val;
 
@@ -410,11 +410,15 @@ class RequestBuilder {
     /**
      * Syntactic sugar for the projection query string var
      *
-     * @param string $projection
+     * @param string|array $projection
      * @return void
      */
-    public function projection(string $projection)
+    public function projection($projection)
     {
+        if (is_array($projection)) {
+            $projection = implode(',', $projection);
+        }
+
         return $this->addQueryVar('projection', $projection);
     }
 
