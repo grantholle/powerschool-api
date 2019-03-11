@@ -34,7 +34,7 @@ class RequestBuilder {
     private $includeProjection = true;
 
     /* @var bool */
-    private $asResponse = true;
+    private $asResponse = false;
 
     /**
      * Constructor
@@ -63,7 +63,7 @@ class RequestBuilder {
         $this->queryString = [];
         $this->id = null;
         $this->includeProjection = true;
-        $this->asResponse = true;
+        $this->asResponse = false;
     }
 
     /**
@@ -455,6 +455,18 @@ class RequestBuilder {
     public function raw()
     {
         $this->asResponse = false;
+
+        return $this;
+    }
+
+    /**
+     * Sets the flag to return a response
+     *
+     * @return $this
+     */
+    public function asResponse()
+    {
+        $this->asResponse = true;
 
         return $this;
     }
