@@ -254,6 +254,12 @@ Route::get('powerschool/verify', 'Auth\LoginController@login')->name('sso.verify
 
 The paths can be changed to whatever suits your fancy. You **must** register these two routes to use the `authenticate` (receives the auth request and requests attributes) and `login` (completes the authentication cycle) methods on your `LoginController`. The route that gets handled by the `login` function **must** be named `sso.verify` so the trait knows the route.
 
+There is also a `logout` method that mimicks Laravel's own function. It also calls `loggedOut()` after the user is logged out.
+
+```php
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+```
+
 ### PowerSchool Plugin
 
 To utilize this feature, you need to add a plugin with the following configuration (at a minimum). The `path` attribute on your `link` must match the path you set in `web.php` for the `authenticate` function in your controller.
