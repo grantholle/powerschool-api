@@ -3,7 +3,6 @@
     "description": "A php package to make interacting with PowerSchool less painful.",
     "keywords": ["powerschool"],
     "license": "MIT",
-    "version": "1.1.1",
     "authors": [
         {
             "name": "Grant Holle",
