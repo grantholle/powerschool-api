@@ -216,6 +216,28 @@ class RequestBuilder {
     }
 
     /**
+     * Alias for setEndpoint()
+     *
+     * @param string $endpoint
+     * @return $this
+     */
+    public function to(string $endpoint)
+    {
+        return $this->setEndpoint($endpoint);
+    }
+
+    /**
+     * Alias for setEndpoint()
+     *
+     * @param string $endpoint
+     * @return $this
+     */
+    public function endpoint(string $endpoint)
+    {
+        return $this->setEndpoint($endpoint);
+    }
+
+    /**
      * Sets the endpoint to the named query
      *
      * @param string $query The named query name (com.organization.product.area.name)

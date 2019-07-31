@@ -118,7 +118,7 @@ $response = PS::powerQuery('com.organization.product.area.name', ['schoolid' => 
 
 ### `setEndpoint(string $query)`
 
-_Aliases: toEndpoint()_
+_Aliases: toEndpoint(), to(), endpoint()_
 
 Sets the endpoint for core PS resources.
 
