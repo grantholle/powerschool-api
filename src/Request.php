@@ -2,11 +2,9 @@
 
 namespace GrantHolle\PowerSchool;
 
-use GrantHolle\PowerSchool\Exception;
 use GuzzleHttp\Client;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Exception\MissingClientCredentialsException;
-use GrantHolle\PowerSchool\Exception\MissingServerAddressException;
 
 class Request
 {
@@ -22,9 +20,6 @@ class Request
     /* @var GuzzleHttp\Client */
     private $client;
 
-    /* @var Symfony\Component\Cache\Simple\FilesystemCache */
-    private $cache;
-
     /* @var string */
     private $clientId;
 
@@ -38,33 +33,16 @@ class Request
      * Creates a new Request object to interact with PS's api
      *
      * @param string $serverAddress The url of the server
-     * @param string $clientId Optional if already cached. The client id obtained from installing a plugin with oauth enabled
-     * @param string $clientSecret Optional if already cached. The client secret obtained from installing a plugin with oauth enabled
+     * @param string $clientId The client id obtained from installing a plugin with oauth enabled
+     * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
      */
-    public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret)
     {
-        $this->cache = new FilesystemCache();
-
-        if (is_null($serverAddress)) {
-            throw new MissingServerAddressException('No PowerSchool server address has been configured');
-        }
-
         $this->client = new Client(['base_uri' => $serverAddress]);
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
+        $this->authToken = Cache::get(self::AUTH_TOKEN, false);
 
-        // Cache the client id and secret in case they aren't included
-        if ($clientId) {
-            $this->setAndCacheClientId($clientId);
-        } else {
-            $this->clientId = $this->cache->get(self::CLIENT_ID, false);
-        }
-
-        if ($clientSecret) {
-            $this->setAndCacheClientSecret($clientSecret);
-        } else {
-            $this->clientSecret = $this->cache->get(self::CLIENT_SECRET, false);
-        }
-
-        $this->authToken = $this->cache->get(self::AUTH_TOKEN, false);
         $this->authenticate();
     }
 
@@ -77,7 +55,7 @@ class Request
      * @param bool $returnResponse Return a response or just decoded
      * @return Array
      */
-    public function makeRequest(string $method, string $endpoint, Array $options, bool $returnResponse)
+    public function makeRequest(string $method, string $endpoint, Array $options, bool $returnResponse = false)
     {
         if (!isset($options['headers'])) {
             $options['headers'] = [];
@@ -111,47 +89,6 @@ class Request
         }
 
         return $body;
-    }
-
-    /**
-     * Sets and caches client credentials
-     *
-     * @param string $clientId The client id obtained from installing a plugin with oauth enabled
-     * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
-     * @return $this
-     */
-    public function setClientCredentials(string $clientId, string $clientSecret)
-    {
-        return $this->setAndCacheClientId($clientId)
-            ->setAndCacheClientSecret($clientSecret);
-    }
-
-    /**
-     * Sets and caches the client id
-     *
-     * @param string $clientId The client id obtained from installing a plugin with oauth enabled
-     * @return $this
-     */
-    public function setAndCacheClientId(string $clientId)
-    {
-        $this->clientId = $clientId;
-        $this->cache->set(self::CLIENT_ID, $clientId);
-
-        return $this;
-    }
-
-    /**
-     * Sets and caches the client secret
-     *
-     * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
-     * @return $this
-     */
-    public function setAndCacheClientSecret(string $clientSecret)
-    {
-        $this->clientSecret = $clientSecret;
-        $this->cache->set(self::CLIENT_SECRET, $clientSecret);
-
-        return $this;
     }
 
     /**
@@ -191,7 +128,7 @@ class Request
 
         // Set and cache the auth token
         $this->authToken = $json->access_token;
-        $this->cache->set(self::AUTH_TOKEN, $this->authToken);
+        Cache::set(self::AUTH_TOKEN, $this->authToken);
 
         return $this;
     }

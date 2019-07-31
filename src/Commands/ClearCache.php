@@ -3,7 +3,7 @@
 namespace GrantHolle\PowerSchool\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Request;
 
 class ClearCache extends Command
@@ -20,21 +20,7 @@ class ClearCache extends Command
      *
      * @var string
      */
-    protected $description = 'Removes existing authorization token cache.';
-
-    /**
-     * The cache object
-     *
-     * @var FilesystemCache
-     */
-    private $cache;
-
-    public function __construct(FilesystemCache $cache)
-    {
-        parent::__construct();
-
-        $this->cache = $cache;
-    }
+    protected $description = 'Removes existing authorization token from the cache.';
 
     /**
      * Execute the console command.
@@ -43,7 +29,8 @@ class ClearCache extends Command
      */
     public function handle()
     {
-        $this->cache->deleteItem(Request::AUTH_TOKEN);
+        Cache::forget(Request::AUTH_TOKEN);
+
         $this->info('Auth token cache cleared!');
     }
 }
