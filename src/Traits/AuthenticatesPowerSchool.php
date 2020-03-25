@@ -3,7 +3,6 @@
 namespace GrantHolle\PowerSchool\Auth;
 
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use OpenID_RelyingParty;
@@ -14,8 +13,6 @@ use Net_URL2;
 
 trait AuthenticatesPowerSchool
 {
-    use RedirectsUsers;
-
     /**
      * Receives the SSO request and requests data from PS
      *
@@ -147,6 +144,20 @@ trait AuthenticatesPowerSchool
     protected function loggedOut(Request $request)
     {
         //
+    }
+
+     /**
+     * Get the post register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        if (method_exists($this, 'redirectTo')) {
+            return $this->redirectTo();
+        }
+
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
     }
 
     /**
