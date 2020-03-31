@@ -22,7 +22,7 @@ trait AuthenticatesPowerSchool
     public function authenticate(Request $request)
     {
         // Set up the relying party
-        $relyingParty = new OpenID_RelyingParty(route('sso.verify'), $request->getSchemeAndHttpHost(), $request->input('openid_identifier'));
+        $relyingParty = new OpenID_RelyingParty(route('sso.verify'), url('/'), $request->input('openid_identifier'));
         $relyingParty->disableAssociations();
         $authRequest = $relyingParty->prepare();
 
