@@ -49,6 +49,16 @@ class RequestBuilder {
     }
 
     /**
+     * Gets the underlying request object
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
      * Cleans all the variables for the next request
      *
      * @return void
