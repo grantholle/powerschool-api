@@ -51,11 +51,12 @@ class Request
      *
      * @param string $method The HTTP method to use
      * @param string $endpoint The api endpoint to call
-     * @param Array $options The HTTP options
+     * @param array $options The HTTP options
      * @param bool $returnResponse Return a response or just decoded
-     * @return Array
+     * @return mixed
+     * @throws MissingClientCredentialsException
      */
-    public function makeRequest(string $method, string $endpoint, Array $options, bool $returnResponse = false)
+    public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false)
     {
         if (!isset($options['headers'])) {
             $options['headers'] = [];

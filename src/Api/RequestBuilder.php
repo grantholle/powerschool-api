@@ -6,7 +6,7 @@ use GrantHolle\PowerSchool\Request;
 
 class RequestBuilder {
 
-    /* @var PowerSchool\Request */
+    /* @var \GrantHolle\PowerSchool\Request */
     private $request;
 
     /* @var string */
@@ -15,10 +15,10 @@ class RequestBuilder {
     /* @var string */
     private $method;
 
-    /* @var Array */
+    /* @var array */
     private $options = [];
 
-    /* @var Array */
+    /* @var array */
     private $data;
 
     /* @var string */
@@ -155,10 +155,10 @@ class RequestBuilder {
      *
      * @param string $endpoint
      * @param string $method
-     * @param Array $data
+     * @param array $data
      * @return $this
      */
-    public function resource(string $endpoint, string $method = null, Array $data = [])
+    public function resource(string $endpoint, string $method = null, array $data = [])
     {
         $this->endpoint = $endpoint;
         $this->includeProjection = false;
@@ -241,10 +241,10 @@ class RequestBuilder {
      * Sets the endpoint to the named query
      *
      * @param string $query The named query name (com.organization.product.area.name)
-     * @param Array $data
+     * @param array $data
      * @return Mixed
      */
-    public function setNamedQuery(string $query, Array $data = [])
+    public function setNamedQuery(string $query, array $data = [])
     {
         $this->endpoint = '/ws/schema/query/' . $query;
 
@@ -261,10 +261,10 @@ class RequestBuilder {
      * Alias for setNamedQuery()
      *
      * @param string $query The named query name (com.organization.product.area.name)
-     * @param Array $data
+     * @param array $data
      * @return Mixed
      */
-    public function namedQuery(string $query, Array $data = [])
+    public function namedQuery(string $query, array $data = [])
     {
         return $this->setNamedQuery($query, $data);
     }
@@ -273,10 +273,10 @@ class RequestBuilder {
      * Alias for setNamedQuery()
      *
      * @param string $query The named query name (com.organization.product.area.name)
-     * @param Array $data
+     * @param array $data
      * @return Mixed
      */
-    public function powerQuery(string $query, Array $data = [])
+    public function powerQuery(string $query, array $data = [])
     {
         return $this->setNamedQuery($query, $data);
     }
@@ -285,10 +285,10 @@ class RequestBuilder {
      * Alias for setNamedQuery()
      *
      * @param string $query The named query name (com.organization.product.area.name)
-     * @param Array $data
+     * @param array $data
      * @return Mixed
      */
-    public function pq(string $query, Array $data = [])
+    public function pq(string $query, array $data = [])
     {
         return $this->setNamedQuery($query, $data);
     }
@@ -331,10 +331,10 @@ class RequestBuilder {
      * Also performs basic sanitation for PS, such
      * as boolean translation
      *
-     * @param Array $data
+     * @param array $data
      * @return $this
      */
-    public function setData(Array $data)
+    public function setData(array $data)
     {
         $this->data = $this->castToValuesString($data);
 
@@ -344,10 +344,10 @@ class RequestBuilder {
     /**
      * Alias for setData()
      *
-     * @param Array $data
+     * @param array $data
      * @return $this
      */
-    public function withData(Array $data)
+    public function withData(array $data)
     {
         return $this->setData($data);
     }
@@ -355,10 +355,10 @@ class RequestBuilder {
     /**
      * Alias for setData()
      *
-     * @param Array $data
+     * @param array $data
      * @return $this
      */
-    public function with(Array $data)
+    public function with(array $data)
     {
         return $this->setData($data);
     }
@@ -529,7 +529,7 @@ class RequestBuilder {
     /**
      * Sends the request to PowerSchool
      *
-     * @return Array
+     * @return array
      */
     public function send()
     {
@@ -588,7 +588,7 @@ class RequestBuilder {
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
      *
-     * @return Array
+     * @return array
      */
     public function get()
     {
@@ -598,7 +598,7 @@ class RequestBuilder {
     /**
      * Sets method to post, sugar around setMethod(), then sends the request
      *
-     * @return Array
+     * @return array
      */
     public function post()
     {
@@ -608,7 +608,7 @@ class RequestBuilder {
     /**
      * Sets method to put, sugar around setMethod(), then sends the request
      *
-     * @return Array
+     * @return array
      */
     public function put()
     {
@@ -618,7 +618,7 @@ class RequestBuilder {
     /**
      * Sets method to patch, sugar around setMethod(), then sends the request
      *
-     * @return Array
+     * @return array
      */
     public function patch()
     {
@@ -628,7 +628,7 @@ class RequestBuilder {
     /**
      * Sets method to delete, sugar around setMethod(), then sends the request
      *
-     * @return Array
+     * @return array
      */
     public function delete()
     {
