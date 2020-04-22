@@ -97,6 +97,7 @@ class Request
      *
      * @param boolean $force Force authentication even if there is an existing token
      * @return $this
+     * @throws MissingClientCredentialsException
      */
     public function authenticate(bool $force = false)
     {
