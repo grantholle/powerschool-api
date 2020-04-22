@@ -132,7 +132,7 @@ class Request
 
         // Set and cache the auth token
         $this->authToken = $json->access_token;
-        Cache::set(self::AUTH_TOKEN, $this->authToken);
+        Cache::put(self::AUTH_TOKEN, $this->authToken, now()->addSeconds($json->expires_in));
 
         return $this;
     }
