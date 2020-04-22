@@ -2,6 +2,7 @@
 
 namespace GrantHolle\PowerSchool;
 
+use GrantHolle\PowerSchool\Commands\Authenticate;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
@@ -46,6 +47,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ClearCache::class,
+                Authenticate::class
             ]);
         }
     }
