@@ -79,7 +79,8 @@ class Request
             $wwwHeader = $response->getHeader('WWW-Authenticate');
 
             if (strpos($wwwHeader[0], 'expired') !== false) {
-                return $this->authenticate(true)->request($method, $endpoint, $options);
+                return $this->authenticate(true)
+                    ->makeRequest($method, $endpoint, $options);
             }
         }
 
