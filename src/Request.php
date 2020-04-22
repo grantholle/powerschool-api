@@ -5,6 +5,7 @@ namespace GrantHolle\PowerSchool;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Exception\MissingClientCredentialsException;
+use Illuminate\Support\Facades\Response;
 
 class Request
 {
@@ -87,7 +88,7 @@ class Request
         $body = json_decode($response->getBody()->getContents());
 
         if ($returnResponse) {
-            return response()->json($body, $response->getStatusCode());
+            return Response::json($body, $response->getStatusCode());
         }
 
         return $body;
