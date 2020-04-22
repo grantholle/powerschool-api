@@ -6,7 +6,7 @@ use GrantHolle\PowerSchool\Request;
 
 class RequestBuilder {
 
-    /* @var \GrantHolle\PowerSchool\Request */
+    /* @var Request */
     private $request;
 
     /* @var string */
@@ -126,7 +126,7 @@ class RequestBuilder {
     /**
      * Sets the id of the resource we're interacting with
      *
-     * @param Mixed $id
+     * @param mixed $id
      * @return $this
      */
     public function setId($id)
@@ -140,7 +140,7 @@ class RequestBuilder {
     /**
      * Alias for setId()
      *
-     * @param Mixed $id
+     * @param mixed $id
      * @return $this
      */
     public function id($id)
@@ -151,7 +151,7 @@ class RequestBuilder {
     /**
      * Alias for setId()
      *
-     * @param Mixed $id
+     * @param mixed $id
      * @return $this
      */
     public function forId($id)
@@ -252,7 +252,7 @@ class RequestBuilder {
      *
      * @param string $query The named query name (com.organization.product.area.name)
      * @param array $data
-     * @return Mixed
+     * @return mixed
      */
     public function setNamedQuery(string $query, array $data = [])
     {
@@ -272,7 +272,7 @@ class RequestBuilder {
      *
      * @param string $query The named query name (com.organization.product.area.name)
      * @param array $data
-     * @return Mixed
+     * @return mixed
      */
     public function namedQuery(string $query, array $data = [])
     {
@@ -284,7 +284,7 @@ class RequestBuilder {
      *
      * @param string $query The named query name (com.organization.product.area.name)
      * @param array $data
-     * @return Mixed
+     * @return mixed
      */
     public function powerQuery(string $query, array $data = [])
     {
@@ -296,7 +296,7 @@ class RequestBuilder {
      *
      * @param string $query The named query name (com.organization.product.area.name)
      * @param array $data
-     * @return Mixed
+     * @return mixed
      */
     public function pq(string $query, array $data = [])
     {
@@ -376,7 +376,7 @@ class RequestBuilder {
     /**
      * Sets the query string for get requests
      *
-     * @param Mixed $queryString
+     * @param mixed $queryString
      * @return $this
      */
     public function withQueryString($queryString)
@@ -395,7 +395,7 @@ class RequestBuilder {
     /**
      * Alias of withQueryString()
      *
-     * @param Mixed $queryString
+     * @param mixed $queryString
      * @return $this
      */
     public function query($queryString)
