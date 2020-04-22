@@ -43,8 +43,6 @@ class Request
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->authToken = Cache::get(self::AUTH_TOKEN, false);
-
-        $this->authenticate();
     }
 
     /**
@@ -59,6 +57,8 @@ class Request
      */
     public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false)
     {
+        $this->authenticate();
+
         if (!isset($options['headers'])) {
             $options['headers'] = [];
         }
@@ -113,7 +113,6 @@ class Request
             throw new MissingClientCredentialsException('Missing either client ID or secret. Cannot authenticate with PowerSchool API.');
         }
 
-        // Fetch and cache if there isn't
         $token = base64_encode($this->clientId . ':' . $this->clientSecret);
 
         $headers = [
