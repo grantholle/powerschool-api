@@ -38,6 +38,9 @@ It also generates a migration file. If you're not using SSO, you can ignore this
 ```
 # Removes existing authorization token cache
 $ php artisan powerschool:clear
+
+# Fetches authorization token and caches it
+$ php artisan powerschool:auth
 ```
 
 ## API
