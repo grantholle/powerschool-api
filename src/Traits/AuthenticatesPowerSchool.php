@@ -10,7 +10,6 @@ use OpenID_Extension_AX;
 use OpenID_Extension;
 use OpenID_Message;
 use Net_URL2;
-use Spatie\Url\Url;
 
 trait AuthenticatesPowerSchool
 {
@@ -23,17 +22,8 @@ trait AuthenticatesPowerSchool
      */
     public function authenticate(Request $request)
     {
-        // PS usernames don't have to be "normal"
-        // and will throw an error if they are used
-        // decoded by Laravel, so we need to re-encode
-        // the last segment of the url, which is the username
-        $decodedIdentifier = $request->input('openid_identifier');
-        $url = Url::fromString($decodedIdentifier);
-        $username = $url->getLastSegment();
-        $identifier = str_replace($username, rawurlencode($username), $decodedIdentifier);
-
         // Set up the relying party
-        $relyingParty = new OpenID_RelyingParty(route('sso.verify'), url('/'), $identifier);
+        $relyingParty = new OpenID_RelyingParty(route('sso.verify'), url('/'), $request->input('openid_identifier'));
         $relyingParty->disableAssociations();
         $authRequest = $relyingParty->prepare();
 
