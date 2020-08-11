@@ -1,6 +1,6 @@
 {
     "name": "grantholle/powerschool-api",
-    "description": "A php package to make interacting with PowerSchool less painful.",
+    "description": "A Laravel package to make interacting with PowerSchool less painful.",
     "keywords": ["powerschool"],
     "license": "MIT",
     "authors": [
