@@ -173,39 +173,13 @@ In a fresh Laravel installation, you will have an `Auth\LoginController`. Replac
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use GrantHolle\PowerSchool\Auth\AuthenticatesPowerSchool;
+use GrantHolle\PowerSchool\Traits\AuthenticatesPowerSchoolWithOpenId;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesPowerSchool;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+    use AuthenticatesPowerSchoolWithOpenId;
+    
+    // ...
 }
 ```
 
@@ -217,13 +191,13 @@ There is also a "hook" after authentication to handle the data requested during 
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use GrantHolle\PowerSchool\Auth\AuthenticatesPowerSchool;
+use GrantHolle\PowerSchool\Traits\AuthenticatesPowerSchoolWithOpenId;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class LoginController extends Controller
 {
-    // ...
+    use AuthenticatesPowerSchoolWithOpenId;
 
     /**
      * The user has been authenticated.

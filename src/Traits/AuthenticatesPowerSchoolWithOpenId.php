@@ -1,6 +1,6 @@
 <?php
 
-namespace GrantHolle\PowerSchool\Auth;
+namespace GrantHolle\PowerSchool\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ use OpenID_Extension;
 use OpenID_Message;
 use Net_URL2;
 
-trait AuthenticatesPowerSchool
+trait AuthenticatesPowerSchoolWithOpenId
 {
     /**
      * Receives the SSO request and requests data from PS
