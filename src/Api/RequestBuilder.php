@@ -39,9 +39,9 @@ class RequestBuilder {
     /**
      * Constructor
      *
-     * @param string $serverAddress
-     * @param string $clientId
-     * @param string $clientSecret
+     * @param string|null $serverAddress
+     * @param string|null $clientId
+     * @param string|null $clientSecret
      */
     public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null)
     {
@@ -166,7 +166,7 @@ class RequestBuilder {
      * @param string $endpoint
      * @param string $method
      * @param array $data
-     * @return $this
+     * @return array|RequestBuilder
      */
     public function resource(string $endpoint, string $method = null, array $data = [])
     {
@@ -307,7 +307,7 @@ class RequestBuilder {
      * Casts all the values recursively as a string
      *
      * @param array $data
-     * @return void
+     * @return array
      */
     function castToValuesString(array $data) {
         foreach ($data as $key => $value) {
@@ -443,7 +443,7 @@ class RequestBuilder {
      * Syntactic sugar for the projection query string var
      *
      * @param string|array $projection
-     * @return void
+     * @return RequestBuilder
      */
     public function projection($projection)
     {
@@ -468,7 +468,6 @@ class RequestBuilder {
     /**
      * Sends a count request to the table api
      *
-     * @param integer $pagesize
      * @return mixed
      */
     public function count()
@@ -540,6 +539,7 @@ class RequestBuilder {
      * Sends the request to PowerSchool
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function send()
     {
@@ -599,6 +599,7 @@ class RequestBuilder {
      * Sets method to get, sugar around setMethod(), then sends the request
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function get()
     {
@@ -609,6 +610,7 @@ class RequestBuilder {
      * Sets method to post, sugar around setMethod(), then sends the request
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function post()
     {
@@ -619,6 +621,7 @@ class RequestBuilder {
      * Sets method to put, sugar around setMethod(), then sends the request
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function put()
     {
@@ -629,6 +632,7 @@ class RequestBuilder {
      * Sets method to patch, sugar around setMethod(), then sends the request
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function patch()
     {
@@ -639,6 +643,7 @@ class RequestBuilder {
      * Sets method to delete, sugar around setMethod(), then sends the request
      *
      * @return array
+     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
      */
     public function delete()
     {
