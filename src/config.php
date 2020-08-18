@@ -4,21 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Model
-    |--------------------------------------------------------------------------
-    |
-    | The model you're using for users
-    |
-    */
-
-    'user-model' => App\User::class,
-
-    /*
-    |--------------------------------------------------------------------------
     | Server Address
     |--------------------------------------------------------------------------
     |
-    | The fully qualified host name or ip address of your PowerSchool instance
+    | The fully qualified host name (including https) or IP address of your PowerSchool instance
     |
     */
 
