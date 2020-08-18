@@ -1,10 +1,10 @@
 <?php
 
-namespace GrantHolle\PowerSchool;
+namespace GrantHolle\PowerSchool\Api;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
-use GrantHolle\PowerSchool\Exception\MissingClientCredentialsException;
+use GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException;
 use Illuminate\Support\Facades\Response;
 
 class Request
@@ -18,7 +18,7 @@ class Request
     /* @var string */
     public const CLIENT_SECRET = 'clientSecret';
 
-    /* @var GuzzleHttp\Client */
+    /* @var Client */
     private $client;
 
     /* @var string */

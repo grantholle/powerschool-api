@@ -1,10 +1,10 @@
 <?php
 
-namespace GrantHolle\PowerSchool\Commands;
+namespace GrantHolle\PowerSchool\Api\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use GrantHolle\PowerSchool\Request;
+use GrantHolle\PowerSchool\Api\Request;
 
 class ClearCache extends Command
 {

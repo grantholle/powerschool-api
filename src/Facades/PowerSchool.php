@@ -1,6 +1,6 @@
 <?php
 
-namespace GrantHolle\PowerSchool\Facades;
+namespace GrantHolle\PowerSchool\Api\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use GrantHolle\PowerSchool\Api\RequestBuilder;

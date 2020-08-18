@@ -1,15 +1,14 @@
 <?php
 
-namespace GrantHolle\PowerSchool;
+namespace GrantHolle\PowerSchool\Api;
 
-use GrantHolle\PowerSchool\Commands\Authenticate;
+use GrantHolle\PowerSchool\Api\Commands\Authenticate;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
-use GrantHolle\PowerSchool\Api\RequestBuilder;
-use GrantHolle\PowerSchool\Commands\ClearCache;
+use GrantHolle\PowerSchool\Api\Commands\ClearCache;
 
-class PowerSchoolServiceProvider extends ServiceProvider
+class PowerSchoolApiServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -18,7 +17,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(RequestBuilder::class, function($app) {
+        $this->app->bind(RequestBuilder::class, function ($app) {
             return new RequestBuilder(
                 config('powerschool.server_address'),
                 config('powerschool.client_id'),
@@ -30,6 +29,7 @@ class PowerSchoolServiceProvider extends ServiceProvider
     /**
      * Perform post-registration booting of services.
      *
+     * @param Filesystem $filesystem
      * @return void
      */
     public function boot(Filesystem $filesystem)
@@ -72,10 +72,10 @@ class PowerSchoolServiceProvider extends ServiceProvider
     {
         $timestamp = date('Y_m_d_His');
 
-        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+        return Collection::make($this->app->databasePath(DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR))
             ->flatMap(function ($path) use ($filesystem) {
-                return $filesystem->glob($path.'*_add_open_id_column_to_users_table.php');
-            })->push($this->app->databasePath()."/migrations/{$timestamp}_add_open_id_column_to_users_table.php")
+                return glob($path . '*_add_open_id_column_to_users_table.php');
+            })->push($this->app->databasePath("migrations/{$timestamp}_add_open_id_column_to_users_table.php"))
             ->first();
     }
 }

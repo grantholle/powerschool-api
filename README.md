@@ -173,7 +173,7 @@ In a fresh Laravel installation, you will have an `Auth\LoginController`. Replac
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use GrantHolle\PowerSchool\Traits\AuthenticatesPowerSchoolWithOpenId;
+use GrantHolle\PowerSchool\Api\Traits\AuthenticatesPowerSchoolWithOpenId;
 
 class LoginController extends Controller
 {
@@ -191,7 +191,7 @@ There is also a "hook" after authentication to handle the data requested during 
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use GrantHolle\PowerSchool\Traits\AuthenticatesPowerSchoolWithOpenId;
+use GrantHolle\PowerSchool\Api\Traits\AuthenticatesPowerSchoolWithOpenId;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 

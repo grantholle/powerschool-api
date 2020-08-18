@@ -1,10 +1,8 @@
 <?php
 
+namespace GrantHolle\PowerSchool\Api\Commands;
 
-namespace GrantHolle\PowerSchool\Commands;
-
-
-use GrantHolle\PowerSchool\Facades\PowerSchool;
+use GrantHolle\PowerSchool\Api\Facades\PowerSchool;
 use Illuminate\Console\Command;
 
 class Authenticate extends Command

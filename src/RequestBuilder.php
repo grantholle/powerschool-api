@@ -2,8 +2,6 @@
 
 namespace GrantHolle\PowerSchool\Api;
 
-use GrantHolle\PowerSchool\Request;
-
 class RequestBuilder {
 
     /* @var Request */
@@ -539,7 +537,7 @@ class RequestBuilder {
      * Sends the request to PowerSchool
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function send()
     {
@@ -599,7 +597,7 @@ class RequestBuilder {
      * Sets method to get, sugar around setMethod(), then sends the request
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function get()
     {
@@ -610,7 +608,7 @@ class RequestBuilder {
      * Sets method to post, sugar around setMethod(), then sends the request
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function post()
     {
@@ -621,7 +619,7 @@ class RequestBuilder {
      * Sets method to put, sugar around setMethod(), then sends the request
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function put()
     {
@@ -632,7 +630,7 @@ class RequestBuilder {
      * Sets method to patch, sugar around setMethod(), then sends the request
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function patch()
     {
@@ -643,7 +641,7 @@ class RequestBuilder {
      * Sets method to delete, sugar around setMethod(), then sends the request
      *
      * @return array
-     * @throws \GrantHolle\PowerSchool\Exception\MissingClientCredentialsException
+     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
      */
     public function delete()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace GrantHolle\PowerSchool\Tests;
+namespace GrantHolle\PowerSchool\Api\Tests;
 
 use GrantHolle\PowerSchool\Api\RequestBuilder;
 use PHPUnit\Framework\TestCase;
