@@ -4,35 +4,41 @@ namespace GrantHolle\PowerSchool\Api;
 
 class RequestBuilder {
 
+    const GET = 'get';
+    const POST = 'post';
+    const PUT = 'put';
+    const PATCH = 'patch';
+    const DELETE = 'delete';
+
     /* @var Request */
-    private $request;
+    protected $request;
 
     /* @var string */
-    private $endpoint;
+    protected $endpoint;
 
     /* @var string */
-    private $method;
+    protected $method;
 
     /* @var array */
-    private $options = [];
+    protected $options = [];
 
     /* @var array */
-    private $data;
+    protected $data;
 
     /* @var string */
-    private $table;
+    protected $table;
 
     /* @var string */
-    private $queryString = [];
+    protected $queryString = [];
 
     /* @var string */
-    private $id;
+    protected $id;
 
     /* @var bool */
-    private $includeProjection = true;
+    protected $includeProjection = true;
 
     /* @var bool */
-    private $asResponse = false;
+    protected $asResponse = false;
 
     /**
      * Constructor
@@ -78,7 +84,7 @@ class RequestBuilder {
      * Sets the table for a request against a custom table
      *
      * @param string $table
-     * @return $this
+     * @return RequestBuilder
      */
     public function setTable(string $table)
     {
@@ -92,7 +98,7 @@ class RequestBuilder {
      * Alias for setTable()
      *
      * @param string $table
-     * @return $this
+     * @return RequestBuilder
      */
     public function table(string $table)
     {
@@ -103,7 +109,7 @@ class RequestBuilder {
      * Alias for setTable()
      *
      * @param string $table
-     * @return $this
+     * @return RequestBuilder
      */
     public function forTable(string $table)
     {
@@ -114,7 +120,7 @@ class RequestBuilder {
      * Alias for setTable()
      *
      * @param string $table
-     * @return $this
+     * @return RequestBuilder
      */
     public function againstTable(string $table)
     {
@@ -125,7 +131,7 @@ class RequestBuilder {
      * Sets the id of the resource we're interacting with
      *
      * @param mixed $id
-     * @return $this
+     * @return RequestBuilder
      */
     public function setId($id)
     {
@@ -139,7 +145,7 @@ class RequestBuilder {
      * Alias for setId()
      *
      * @param mixed $id
-     * @return $this
+     * @return RequestBuilder
      */
     public function id($id)
     {
@@ -150,7 +156,7 @@ class RequestBuilder {
      * Alias for setId()
      *
      * @param mixed $id
-     * @return $this
+     * @return RequestBuilder
      */
     public function forId($id)
     {
@@ -162,7 +168,7 @@ class RequestBuilder {
      * will send the request automatically.
      *
      * @param string $endpoint
-     * @param string $method
+     * @param string|null $method
      * @param array $data
      * @return array|RequestBuilder
      */
@@ -190,7 +196,7 @@ class RequestBuilder {
     /**
      * Does not force a projection parameter for GET requests
      *
-     * @return $this
+     * @return RequestBuilder
      */
     public function excludeProjection()
     {
@@ -203,7 +209,7 @@ class RequestBuilder {
      * Sets the endpoint for the request
      *
      * @param string $endpoint
-     * @return $this
+     * @return RequestBuilder
      */
     public function setEndpoint(string $endpoint)
     {
@@ -216,7 +222,7 @@ class RequestBuilder {
      * Alias for setEndpoint()
      *
      * @param string $endpoint
-     * @return $this
+     * @return RequestBuilder
      */
     public function toEndpoint(string $endpoint)
     {
@@ -227,7 +233,7 @@ class RequestBuilder {
      * Alias for setEndpoint()
      *
      * @param string $endpoint
-     * @return $this
+     * @return RequestBuilder
      */
     public function to(string $endpoint)
     {
@@ -238,7 +244,7 @@ class RequestBuilder {
      * Alias for setEndpoint()
      *
      * @param string $endpoint
-     * @return $this
+     * @return RequestBuilder
      */
     public function endpoint(string $endpoint)
     {
@@ -250,7 +256,7 @@ class RequestBuilder {
      *
      * @param string $query The named query name (com.organization.product.area.name)
      * @param array $data
-     * @return mixed
+     * @return RequestBuilder|mixed
      */
     public function setNamedQuery(string $query, array $data = [])
     {
@@ -262,7 +268,11 @@ class RequestBuilder {
             return $this->withData($data)->post();
         }
 
-        return $this->setMethod('post');
+        // By default don't include the projection unless
+        // it gets added later explicitly
+        $this->includeProjection = false;
+
+        return $this->setMethod(static::POST);
     }
 
     /**
@@ -302,45 +312,12 @@ class RequestBuilder {
     }
 
     /**
-     * Casts all the values recursively as a string
-     *
-     * @param array $data
-     * @return array
-     */
-    function castToValuesString(array $data) {
-        foreach ($data as $key => $value) {
-            // Recursively set the nested array values
-            if (is_array($value)) {
-                $data[$key] = $this->castToValuesString($value);
-                continue;
-            }
-
-            // If it's null set the value to an empty string
-            if (is_null($value)) {
-                $value = '';
-            }
-
-            // If the type is a boolean, set it to the
-            // integer type that PS uses, 1 or 0
-            if (gettype($value) === 'boolean') {
-                $value = $value ? '1' : '0';
-            }
-
-            // Cast everything as a string, otherwise PS
-            // with throw a typecast error or something
-            $data[$key] = (string)$value;
-        }
-
-        return $data;
-    }
-
-    /**
      * Sets the data for the post/put/patch requests
      * Also performs basic sanitation for PS, such
-     * as boolean translation
+     * as bool translation
      *
      * @param array $data
-     * @return $this
+     * @return RequestBuilder
      */
     public function setData(array $data)
     {
@@ -353,7 +330,7 @@ class RequestBuilder {
      * Alias for setData()
      *
      * @param array $data
-     * @return $this
+     * @return RequestBuilder
      */
     public function withData(array $data)
     {
@@ -364,7 +341,7 @@ class RequestBuilder {
      * Alias for setData()
      *
      * @param array $data
-     * @return $this
+     * @return RequestBuilder
      */
     public function with(array $data)
     {
@@ -372,10 +349,24 @@ class RequestBuilder {
     }
 
     /**
+     * Sets an item to be included in the post request
+     *
+     * @param string $key
+     * @param $value
+     * @return $this
+     */
+    public function setDataItem(string $key, $value)
+    {
+        $this->data[$key] = $this->castToValuesString($value);
+
+        return $this;
+    }
+
+    /**
      * Sets the query string for get requests
      *
      * @param mixed $queryString
-     * @return $this
+     * @return RequestBuilder
      */
     public function withQueryString($queryString)
     {
@@ -394,7 +385,7 @@ class RequestBuilder {
      * Alias of withQueryString()
      *
      * @param mixed $queryString
-     * @return $this
+     * @return RequestBuilder
      */
     public function query($queryString)
     {
@@ -406,7 +397,7 @@ class RequestBuilder {
      *
      * @param string $key
      * @param mixed $val
-     * @return $this
+     * @return RequestBuilder
      */
     public function addQueryVar(string $key, $val)
     {
@@ -419,22 +410,56 @@ class RequestBuilder {
      * Checks to see if a query variable has been set
      *
      * @param string $key
-     * @return boolean
+     * @return bool
      */
     public function hasQueryVar(string $key)
     {
-        return !empty($this->queryString[$key]);
+        return isset($this->queryString[$key]) &&
+            !empty($this->queryString[$key]);
     }
 
     /**
      * Syntactic sugar for the q query string var
      *
      * @param string $query
-     * @return $this
+     * @return RequestBuilder
      */
     public function q(string $query)
     {
         return $this->addQueryVar('q', $query);
+    }
+
+    /**
+     * Sugar for q()
+     *
+     * @param string $expression
+     * @return RequestBuilder
+     */
+    public function queryExpression(string $expression)
+    {
+        return $this->q($expression);
+    }
+
+    /**
+     * Adds an ad-hoc filter expression, meant to be used for PowerQueries
+     *
+     * @param string $expression
+     * @return $this
+     */
+    public function adHocFilter(string $expression)
+    {
+        return $this->addQueryVar('$q', $expression);
+    }
+
+    /**
+     * Sugar for adHocFilter()
+     *
+     * @param string $expression
+     * @return $this
+     */
+    public function filter(string $expression)
+    {
+        return $this->adHocFilter($expression);
     }
 
     /**
@@ -448,6 +473,7 @@ class RequestBuilder {
         if (is_array($projection)) {
             $projection = implode(',', $projection);
         }
+        $this->includeProjection = true;
 
         return $this->addQueryVar('projection', $projection);
     }
@@ -455,12 +481,104 @@ class RequestBuilder {
     /**
      * Syntactic sugar for the pagesize query string var
      *
-     * @param integer $pagesize
+     * @param int $pageSize
+     * @return RequestBuilder
+     */
+    public function pageSize(int $pageSize)
+    {
+        return $this->addQueryVar('pagesize', $pageSize);
+    }
+
+    /**
+     * Sets the page query variable
+     *
+     * @param int $page
+     * @return RequestBuilder
+     */
+    public function page(int $page)
+    {
+        return $this->addQueryVar('page', $page);
+    }
+
+    /**
+     * Sets the sorting columns and direction for the request
+     *
+     * @param string|array $columns
+     * @param bool $descending
+     * @return RequestBuilder
+     */
+    public function sort($columns, bool $descending = false)
+    {
+        $sort = is_array($columns)
+            ? implode(',', $columns)
+            : $columns;
+
+        $this->addQueryVar('sort', $sort);
+        $this->addQueryVar('sortdescending', $descending ? 'true' : 'false');
+
+        return $this;
+    }
+
+    /**
+     * Adds an order query string variable
+     *
+     * @param string $expression
      * @return $this
      */
-    public function pagesize(int $pagesize)
+    public function adHocOrder(string $expression)
     {
-        return $this->addQueryVar('pagesize', $pagesize);
+        return $this->addQueryVar('order', $expression);
+    }
+
+    /**
+     * Sugar for adHocOrder()
+     *
+     * @param string $expression
+     * @return $this
+     * @see RequestBuilder::adHocOrder()
+     */
+    public function order(string $expression)
+    {
+        return $this->adHocOrder($expression);
+    }
+
+    /**
+     * Adds the count query variable for
+     *
+     * @return $this
+     */
+    public function includeCount()
+    {
+        return $this->addQueryVar('count', 'true');
+    }
+
+    /**
+     * Configures the data version for the PowerQuery
+     *
+     * @param int $version
+     * @param string $applicationName
+     * @return $this
+     */
+    public function dataVersion(int $version, string $applicationName)
+    {
+        $this->setDataItem('$dataversion', $version);
+        $this->setDataItem('$dataversion_applicationname', $applicationName);
+
+        return $this;
+    }
+
+    /**
+     * Gets the data changes based on the data version subscription
+     *
+     * @param string $applicationName
+     * @param int $version
+     * @return array
+     * @throws Exception\MissingClientCredentialsException
+     */
+    public function getDataSubscriptionChanges(string $applicationName, int $version)
+    {
+        return $this->endpoint("/ws/dataversion/{$applicationName}/{$version}")
+            ->get();
     }
 
     /**
@@ -479,7 +597,7 @@ class RequestBuilder {
     /**
      * Sets a flag to return as a decoded json rather than an Illuminate\Response
      *
-     * @return $this
+     * @return RequestBuilder
      */
     public function raw()
     {
@@ -491,7 +609,7 @@ class RequestBuilder {
     /**
      * Sets the flag to return a response
      *
-     * @return $this
+     * @return RequestBuilder
      */
     public function asResponse()
     {
@@ -501,14 +619,47 @@ class RequestBuilder {
     }
 
     /**
-     * Builds the dumb request structure for PowerSchool table queries
+     * Casts all the values recursively as a string
      *
-     * @return void
+     * @param array $data
+     * @return array
      */
-    protected function buildRequestJson()
+    protected function castToValuesString(array $data) {
+        foreach ($data as $key => $value) {
+            // Recursively set the nested array values
+            if (is_array($value)) {
+                $data[$key] = $this->castToValuesString($value);
+                continue;
+            }
+
+            // If it's null set the value to an empty string
+            if (is_null($value)) {
+                $value = '';
+            }
+
+            // If the type is a bool, set it to the
+            // integer type that PS uses, 1 or 0
+            if (is_bool($value)) {
+                $value = $value ? '1' : '0';
+            }
+
+            // Cast everything as a string, otherwise PS
+            // with throw a typecast error or something
+            $data[$key] = (string) $value;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Builds the dumb request structure for PowerSchool
+     *
+     * @return RequestBuilder
+     */
+    public function buildRequestJson()
     {
-        if ($this->method === 'get' || $this->method === 'delete') {
-            return;
+        if ($this->method === static::GET || $this->method === 'delete') {
+            return $this;
         }
 
         // Reset the json object from previous requests
@@ -528,9 +679,46 @@ class RequestBuilder {
         }
 
         // Remove the json option if there is nothing there
-        if (count($this->options['json']) === 0) {
+        if (empty($this->options['json'])) {
             unset($this->options['json']);
         }
+
+        return $this;
+    }
+
+    /**
+     * Builds the query string for the request
+     *
+     * @return RequestBuilder
+     */
+    public function buildRequestQuery()
+    {
+        // Build the query by hand
+        if ($this->method !== static::GET && $this->method !== static::POST) {
+            return $this;
+        }
+
+        $this->options['query'] = '';$this->options['query'] = '';
+        $qs = [];
+
+        // Build the query string
+        foreach ($this->queryString as $var => $val) {
+            $qs[] = $var . '=' . $val;
+        }
+
+        // Get requests are required to have a projection parameter
+        if (
+            !$this->hasQueryVar('projection') &&
+            $this->includeProjection
+        ) {
+            $qs[] = 'projection=*';
+        }
+
+        if (!empty($qs)) {
+            $this->options['query'] = implode('&', $qs);
+        }
+
+        return $this;
     }
 
     /**
@@ -538,31 +726,20 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send()
     {
-        $this->buildRequestJson();
+        $this->buildRequestJson()
+            ->buildRequestQuery();
 
-        // Build the query by hand
-        if ($this->method === 'get' || $this->method === 'post') {
-            $this->options['query'] = '';
-
-            // Build the query string
-            foreach ($this->queryString as $var => $val) {
-                $this->options['query'] .= $var . '=' . $val . '&';
-            }
-
-            // Get requests are required to have a projection parameter
-            if (!$this->hasQueryVar('projection') && $this->includeProjection && $this->method === 'get') {
-                $this->options['query'] .= 'projection=*&';
-            }
-
-            if (!empty($this->options['query'])) {
-                $this->options['query'] = substr($this->options['query'], 0, -1);
-            }
-        }
-
-        $response = $this->request->makeRequest($this->method, $this->endpoint, $this->options, $this->asResponse);
+        $response = $this->getRequest()
+            ->makeRequest(
+                $this->method,
+                $this->endpoint,
+                $this->options,
+                $this->asResponse
+            );
 
         $this->freshen();
 
@@ -573,7 +750,7 @@ class RequestBuilder {
      * Sets the request method
      *
      * @param string $method
-     * @return $this
+     * @return RequestBuilder
      */
     public function setMethod(string $method)
     {
@@ -586,7 +763,7 @@ class RequestBuilder {
      * Alias for setMethod()
      *
      * @param string $method
-     * @return $this
+     * @return RequestBuilder
      */
     public function method(string $method)
     {
@@ -598,10 +775,11 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get()
     {
-        return $this->setMethod('get')->send();
+        return $this->setMethod(static::GET)->send();
     }
 
     /**
@@ -609,10 +787,11 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function post()
     {
-        return $this->setMethod('post')->send();
+        return $this->setMethod(static::POST)->send();
     }
 
     /**
@@ -620,10 +799,11 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function put()
     {
-        return $this->setMethod('put')->send();
+        return $this->setMethod(static::PUT)->send();
     }
 
     /**
@@ -631,10 +811,11 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function patch()
     {
-        return $this->setMethod('patch')->send();
+        return $this->setMethod(static::PATCH)->send();
     }
 
     /**
@@ -642,9 +823,10 @@ class RequestBuilder {
      *
      * @return array
      * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete()
     {
-        return $this->setMethod('delete')->send();
+        return $this->setMethod(static::DELETE)->send();
     }
 }

@@ -17,7 +17,9 @@
         "illuminate/console": "^5.6|^6.0|^7.0",
         "illuminate/support": "^5.6|^6.0|^7.0"
     },
-    "require-dev": {},
+    "require-dev": {
+        "orchestra/testbench": "^5.4"
+    },
     "autoload": {
         "psr-4": {
             "GrantHolle\\PowerSchool\\Api\\": "src"
@@ -25,7 +27,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GrantHolle\\PowerSchool\\Tests\\": "tests"
+            "Tests\\": "tests"
         }
     },
     "config": {
