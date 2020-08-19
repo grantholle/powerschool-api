@@ -29,10 +29,9 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
     /**
      * Perform post-registration booting of services.
      *
-     * @param Filesystem $filesystem
      * @return void
      */
-    public function boot(Filesystem $filesystem)
+    public function boot()
     {
         // Publish the configuration and migration
         $this->publishes([
