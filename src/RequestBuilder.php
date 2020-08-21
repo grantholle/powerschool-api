@@ -568,6 +568,18 @@ class RequestBuilder {
     }
 
     /**
+     * Alias of dataVersion()
+     *
+     * @param int $version
+     * @param string $applicationName
+     * @return $this
+     */
+    public function withDataVersion(int $version, string $applicationName)
+    {
+        return $this->dataVersion($version, $applicationName);
+    }
+
+    /**
      * Gets the data changes based on the data version subscription
      *
      * @param string $applicationName

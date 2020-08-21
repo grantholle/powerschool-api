@@ -270,6 +270,12 @@ Sets the `projection` query variable for the request.
 
 Prevents the `projection` query variable from being included in the request.
 
+#### `dataVersion(int $version, string $applicationName)`
+
+_Aliases: withDataVersion()_
+
+Sets the `$dataversion` and `$dataversion_applicationname` data items.
+
 ## Performing Requests
 
 There are many ways to perform the request after building queries. At the end of the day, each one sets the method/HTTP verb before calling `send()`. If you'd like to call `send()`, make sure you set the method by calling `method(string $verb)`. There are also helpers to set methods using constants.
