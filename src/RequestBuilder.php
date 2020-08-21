@@ -580,6 +580,62 @@ class RequestBuilder {
     }
 
     /**
+     * Adds `expansions` query variable
+     *
+     * @param string|array $expansions
+     * @return $this
+     */
+    public function expansions($expansions)
+    {
+        $expansions = is_array($expansions)
+            ? implode(',', $expansions)
+            : $expansions;
+
+        $this->addQueryVar('expansions', $expansions);
+
+        return $this;
+    }
+
+    /**
+     * Alias of expansions()
+     *
+     * @param string|array $expansions
+     * @return $this
+     */
+    public function withExpansions($expansions)
+    {
+        return $this->expansions($expansions);
+    }
+
+    /**
+     * Adds `expansions` query variable
+     *
+     * @param string|array $extensions
+     * @return $this
+     */
+    public function extensions($extensions)
+    {
+        $extensions = is_array($extensions)
+            ? implode(',', $extensions)
+            : $extensions;
+
+        $this->addQueryVar('extensions', $extensions);
+
+        return $this;
+    }
+
+    /**
+     * Alias of expansions()
+     *
+     * @param string|array $extensions
+     * @return $this
+     */
+    public function withExtensions($extensions)
+    {
+        return $this->expansions($extensions);
+    }
+
+    /**
      * Gets the data changes based on the data version subscription
      *
      * @param string $applicationName

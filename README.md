@@ -276,6 +276,18 @@ _Aliases: withDataVersion()_
 
 Sets the `$dataversion` and `$dataversion_applicationname` data items.
 
+#### `expansions(string|array $expansions)`
+
+_Aliases: withExpansions()_
+
+Adds the `expansions` query variable.
+
+#### `extensions(string|array $expansions)`
+
+_Aliases: withExtensions()_
+
+Adds the `extensions` query variable.
+
 ## Performing Requests
 
 There are many ways to perform the request after building queries. At the end of the day, each one sets the method/HTTP verb before calling `send()`. If you'd like to call `send()`, make sure you set the method by calling `method(string $verb)`. There are also helpers to set methods using constants.
