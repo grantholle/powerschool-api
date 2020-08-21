@@ -268,6 +268,8 @@ Sets the `projection` query variable for the request.
 
 #### `excludeProjection()`
 
+_Aliases: withoutProjection()_
+
 Prevents the `projection` query variable from being included in the request.
 
 #### `dataVersion(int $version, string $applicationName)`

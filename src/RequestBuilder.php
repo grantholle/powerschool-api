@@ -206,6 +206,16 @@ class RequestBuilder {
     }
 
     /**
+     * Alias of excludeProjection()
+     *
+     * @return $this
+     */
+    public function withoutProjection()
+    {
+        return $this->excludeProjection();
+    }
+
+    /**
      * Sets the endpoint for the request
      *
      * @param string $endpoint
@@ -215,7 +225,7 @@ class RequestBuilder {
     {
         $this->endpoint = $endpoint;
 
-        return $this;
+        return $this->excludeProjection();
     }
 
     /**
