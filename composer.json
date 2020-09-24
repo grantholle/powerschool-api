@@ -11,11 +11,11 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.3",
-        "illuminate/console": "^5.6|^6.0|^7.0",
-        "illuminate/support": "^5.6|^6.0|^7.0"
+        "guzzlehttp/guzzle": "^7.0.1",
+        "illuminate/console": "^7.0|^8.0",
+        "illuminate/support": "^7.0|^8.0"
     },
     "require-dev": {
         "orchestra/testbench": "^5.4"
