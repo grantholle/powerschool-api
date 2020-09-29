@@ -35,7 +35,7 @@ class RequestBuilder {
     protected $id;
 
     /* @var bool */
-    protected $includeProjection = true;
+    protected $includeProjection = false;
 
     /* @var bool */
     protected $asResponse = false;
@@ -76,7 +76,7 @@ class RequestBuilder {
         $this->table = null;
         $this->queryString = [];
         $this->id = null;
-        $this->includeProjection = true;
+        $this->includeProjection = false;
         $this->asResponse = false;
     }
 
@@ -90,6 +90,7 @@ class RequestBuilder {
     {
         $this->table = $table;
         $this->endpoint = '/ws/schema/table/' . $table;
+        $this->includeProjection = true;
 
         return $this;
     }
