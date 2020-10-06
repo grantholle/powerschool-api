@@ -26,6 +26,9 @@ class Request
     /* @var string */
     protected $authToken;
 
+    /* @var int */
+    protected $attempts = 0;
+
     /**
      * Creates a new Request object to interact with PS's api
      *
@@ -55,6 +58,7 @@ class Request
     public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false)
     {
         $this->authenticate();
+        $this->attempts++;
 
         if (!isset($options['headers'])) {
             $options['headers'] = [];
@@ -77,19 +81,15 @@ class Request
             $response = $exception->getResponse();
 
             // If the response is an expired token, reauthenticate and try again
-            if ($response->getStatusCode() === 401) {
-                $wwwHeader = $response->getHeader('WWW-Authenticate');
-
-                if (strpos($wwwHeader[0], 'expired') !== false) {
-                    return $this->authenticate(true)
-                        ->makeRequest($method, $endpoint, $options);
-                }
+            if ($response->getStatusCode() === 401 && $this->attempts < 3) {
+                return $this->authenticate(true)
+                    ->makeRequest($method, $endpoint, $options);
             }
 
             throw $exception;
         }
 
-
+        $this->attempts = 0;
         $body = json_decode($response->getBody()->getContents());
 
         if ($returnResponse) {
