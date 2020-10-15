@@ -18,6 +18,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder forId($id)
  * @method static mixed resource(string $endpoint, string $method = null, array $data = [])
  * @method static RequestBuilder excludeProjection()
+ * @method static RequestBuilder withoutProjection()
  * @method static RequestBuilder setEndpoint(string $endpoint)
  * @method static RequestBuilder toEndpoint(string $endpoint)
  * @method static RequestBuilder to(string $endpoint)
