@@ -357,6 +357,25 @@ PowerSchool::getDataSubscriptionChanges('myapp', 12345);
 // } 
 ```
 
+## Pagination
+
+When using PowerQueries, you can easily paginate results using the `$builder->paginate($pageSize)` function. You can use this inside of a `while` loop to process all the results in your query more efficiently than returning the full result. The default page size is 100.
+
+```php
+use GrantHolle\PowerSchool\Api\Facades\PowerSchool;
+
+// You have to set data in a separate function call
+// Otherwise the request will be sent automatically
+$builder = PowerSchool::pq('com.organization.plugin_name.entity.query_name')
+    ->with(['some_variable' => $value]);
+
+while ($records = $builder->paginate(25)) {
+    // Do something awesome
+}
+```
+
+Whenever there are no more results, the loop will exit. Eventually support for other types of queries, namely generic `table` queries, will hopefully be supported. As of now, only PowerQueries will work with `paginate()`.
+
 ## License
 
 [MIT](LICENSE)

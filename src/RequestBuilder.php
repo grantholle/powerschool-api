@@ -40,6 +40,9 @@ class RequestBuilder {
     /* @var bool */
     protected $asResponse = false;
 
+    /** @var Paginator */
+    protected $paginator;
+
     /**
      * Constructor
      *
@@ -801,31 +804,6 @@ class RequestBuilder {
     }
 
     /**
-     * Sends the request to PowerSchool
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function send()
-    {
-        $this->buildRequestJson()
-            ->buildRequestQuery();
-
-        $response = $this->getRequest()
-            ->makeRequest(
-                $this->method,
-                $this->endpoint,
-                $this->options,
-                $this->asResponse
-            );
-
-        $this->freshen();
-
-        return $response;
-    }
-
-    /**
      * Sets the request method
      *
      * @param string $method
@@ -907,5 +885,49 @@ class RequestBuilder {
     public function delete()
     {
         return $this->setMethod(static::DELETE)->send();
+    }
+
+    /**
+     * Sends the request to PowerSchool
+     *
+     * @param bool $reset
+     * @return \stdClass
+     * @throws Exception\MissingClientCredentialsException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function send(bool $reset = true)
+    {
+        $this->buildRequestJson()
+            ->buildRequestQuery();
+
+        $response = $this->getRequest()
+            ->makeRequest(
+                $this->method,
+                $this->endpoint,
+                $this->options,
+                $this->asResponse
+            );
+
+        if ($reset) {
+            $this->freshen();
+        }
+
+        return $response;
+    }
+
+    /**
+     * This will return a chunk of data from PS
+     * NOTE: this is currently only supported by PowerQueries
+     *
+     * @param int $pageSize
+     * @return array|false
+     */
+    public function paginate(int $pageSize = 100)
+    {
+        if (!isset($this->paginator)) {
+            $this->paginator = new Paginator($this, 1, $pageSize);
+        }
+
+        return $this->paginator->page();
     }
 }
