@@ -928,6 +928,12 @@ class RequestBuilder {
             $this->paginator = new Paginator($this, 1, $pageSize);
         }
 
-        return $this->paginator->page();
+        $results = $this->paginator->page();
+
+        if ($results === false) {
+            unset($this->paginator);
+        }
+
+        return $results;
     }
 }
