@@ -830,12 +830,17 @@ class RequestBuilder {
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
      *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
+     * @param string|null $endpoint
+     * @return \stdClass
+     * @throws Exception\MissingClientCredentialsException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get()
+    public function get(string $endpoint = null)
     {
+        if ($endpoint) {
+            $this->setEndpoint($endpoint);
+        }
+
         return $this->setMethod(static::GET)->send();
     }
 

@@ -312,9 +312,15 @@ Sends the request using the verb set. By default will return the results from th
 
 Calling `count()` on the builder will perform a count query by appending `/count` to the end of the endpoint and perform the `get` request automatically.
 
-#### `get()` 
+#### `get(string $endpoint = null)` 
 
-Sets the verb to be `get` and sends the request.
+Sets the verb to be `get` and sends the request. You can also pass the endpoint directly to set the endpoint and perform the request automatically.
+
+```php
+use GrantHolle\PowerSchool\Api\Facades\PowerSchool;
+
+PowerSchool::get('/ws/v1/staff/111');
+```
 
 #### `post()` 
 

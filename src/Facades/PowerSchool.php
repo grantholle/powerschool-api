@@ -49,7 +49,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static mixed send()
  * @method static RequestBuilder setMethod(string $method)
  * @method static RequestBuilder method(string $method)
- * @method static mixed get()
+ * @method static mixed get(string $endpoint = null)
  * @method static mixed post()
  * @method static mixed put()
  * @method static mixed patch()
