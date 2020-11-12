@@ -24,7 +24,7 @@ The package will be automatically discovered by Laravel, so there's no reason to
 A config file needs to be created to store the server address, client ID, and secret to interact with PowerSchool.
 
 ```
-$ php artisan vendor:publish --provider=GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider
+$ php artisan vendor:publish --provider="GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider"
 ```
 
 This will generate `config/powerschool.php`. We then need to set some variables in `.env`.
