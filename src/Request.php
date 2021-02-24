@@ -4,7 +4,6 @@ namespace GrantHolle\PowerSchool\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException;
 use Illuminate\Support\Facades\Response;
@@ -13,6 +12,8 @@ class Request
 {
     /* @var string */
     public const AUTH_TOKEN = 'authToken';
+
+    public $cacheToken;
 
     /* @var Client */
     protected $client;
@@ -35,13 +36,18 @@ class Request
      * @param string $serverAddress The url of the server
      * @param string $clientId The client id obtained from installing a plugin with oauth enabled
      * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
+     * @param bool $cacheToken
      */
-    public function __construct(string $serverAddress, string $clientId, string $clientSecret)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret, bool $cacheToken = true)
     {
         $this->client = new Client(['base_uri' => $serverAddress]);
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->authToken = Cache::get(self::AUTH_TOKEN, false);
+        $this->cacheToken = $cacheToken;
+
+        if ($this->cacheToken) {
+            $this->authToken = Cache::get(self::AUTH_TOKEN, false);
+        }
     }
 
     /**
@@ -137,7 +143,10 @@ class Request
 
         // Set and cache the auth token
         $this->authToken = $json->access_token;
-        Cache::put(self::AUTH_TOKEN, $this->authToken, now()->addSeconds($json->expires_in));
+
+        if ($this->cacheToken) {
+            Cache::put(self::AUTH_TOKEN, $this->authToken, now()->addSeconds($json->expires_in));
+        }
 
         return $this;
     }

@@ -49,10 +49,11 @@ class RequestBuilder {
      * @param string|null $serverAddress
      * @param string|null $clientId
      * @param string|null $clientSecret
+     * @param bool $cacheToken
      */
-    public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null)
+    public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null, bool $cacheToken = true)
     {
-        $this->request = new Request($serverAddress, $clientId, $clientSecret);
+        $this->request = new Request($serverAddress, $clientId, $clientSecret, $cacheToken);
     }
 
     /**
