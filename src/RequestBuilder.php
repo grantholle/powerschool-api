@@ -40,6 +40,9 @@ class RequestBuilder {
     /* @var bool */
     protected $asResponse = false;
 
+    /** @var string */
+    protected string $pageKey = 'record';
+
     /** @var Paginator */
     protected $paginator;
 
@@ -82,6 +85,8 @@ class RequestBuilder {
         $this->id = null;
         $this->includeProjection = false;
         $this->asResponse = false;
+        unset($this->paginator);
+        $this->pageKey = 'record';
     }
 
     /**
@@ -95,6 +100,7 @@ class RequestBuilder {
         $this->table = $table;
         $this->endpoint = '/ws/schema/table/' . $table;
         $this->includeProjection = true;
+        $this->pageKey = 'record';
 
         return $this;
     }
@@ -229,6 +235,8 @@ class RequestBuilder {
     public function setEndpoint(string $endpoint)
     {
         $this->endpoint = $endpoint;
+        $pieces = explode('/', '/ws/v1/school/6/course');
+        $this->pageKey = end($pieces);
 
         return $this->excludeProjection();
     }
@@ -276,6 +284,7 @@ class RequestBuilder {
     public function setNamedQuery(string $query, array $data = [])
     {
         $this->endpoint = '/ws/schema/query/' . $query;
+        $this->pageKey = 'record';
 
         // If there's data along with it,
         // it's short hand for sending the request
@@ -931,7 +940,7 @@ class RequestBuilder {
     public function paginate(int $pageSize = 100)
     {
         if (!isset($this->paginator)) {
-            $this->paginator = new Paginator($this, 1, $pageSize);
+            $this->paginator = new Paginator($this, 1, $pageSize, $this->pageKey);
         }
 
         $results = $this->paginator->page();

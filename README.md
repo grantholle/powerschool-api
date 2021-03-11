@@ -370,17 +370,24 @@ When using PowerQueries, you can easily paginate results using the `$builder->pa
 ```php
 use GrantHolle\PowerSchool\Api\Facades\PowerSchool;
 
+// PowerQuery
 // You have to set data in a separate function call
 // Otherwise the request will be sent automatically
 $builder = PowerSchool::pq('com.organization.plugin_name.entity.query_name')
     ->with(['some_variable' => $value]);
+    
+// "Normal" endpoint
+$builder = PowerSchool::to('/ws/v1/school/1/course')
+    ->method(PowerSchool::GET);
+    
+// "Table" endpoints    
+$builder = PowerSchool::table('u_my_table')
+    ->method(PowerSchool::GET);    
 
 while ($records = $builder->paginate(25)) {
     // Do something awesome
 }
 ```
-
-Whenever there are no more results, the loop will exit. Eventually support for other types of queries, namely generic `table` queries, will hopefully be supported. As of now, only PowerQueries will work with `paginate()`.
 
 ## License
 

@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Facade;
 use GrantHolle\PowerSchool\Api\RequestBuilder;
 
 /**
+ * @var string GET
+ * @var string POST
+ * @var string PUT
+ * @var string PATCH
+ * @var string DELETE
  * @method static Request getRequest()
  * @method static void freshen()
  * @method static RequestBuilder setTable(string $table)
