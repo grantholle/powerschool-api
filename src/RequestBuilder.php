@@ -235,7 +235,7 @@ class RequestBuilder {
     public function setEndpoint(string $endpoint)
     {
         $this->endpoint = $endpoint;
-        $pieces = explode('/', '/ws/v1/school/6/course');
+        $pieces = explode('/', $endpoint);
         $this->pageKey = end($pieces);
 
         return $this->excludeProjection();
