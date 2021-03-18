@@ -946,7 +946,7 @@ class RequestBuilder {
         $results = $this->paginator->page();
 
         if ($results === false) {
-            unset($this->paginator);
+            $this->freshen();
         }
 
         return $results;
