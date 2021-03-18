@@ -35,6 +35,10 @@ class Paginator
             // design choices of terrible software
             $baseKey = $this->key . 's';
             $records = $results->{$baseKey}->{$this->key} ?? [];
+
+            if (!is_array($records)) {
+                $records = [$records];
+            }
         }
 
         $this->page += 1;
