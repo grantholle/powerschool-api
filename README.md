@@ -13,21 +13,15 @@ More functionality was added in v2, along with tests for peace of mind.
 
 ## Installation
 
-```
-$ composer require grantholle/powerschool-api
+```bash
+composer require grantholle/powerschool-api
 ```
 
 The package will be automatically discovered by Laravel, so there's no reason to add it to `config/app.php` unless you want to.
 
 ## Configuration
 
-A config file needs to be created to store the server address, client ID, and secret to interact with PowerSchool.
-
-```
-$ php artisan vendor:publish --provider="GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider"
-```
-
-This will generate `config/powerschool.php`. We then need to set some variables in `.env`.
+You need to set some variables in `.env`.
 
 ```
 POWERSCHOOL_ADDRESS=
@@ -35,14 +29,20 @@ POWERSCHOOL_CLIENT_ID=
 POWERSCHOOL_CLIENT_SECRET=
 ```
 
+Optionally, you can publish the config file to store the server address, client ID, and secret to interact with PowerSchool. This will generate `config/powerschool.php`, but is not necessary.
+
+```bash
+php artisan vendor:publish --provider="GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider"
+```
+
 ## Commands
 
 ```bash
 # Removes existing authorization token cache
-$ php artisan powerschool:clear
+php artisan powerschool:clear
 
 # Fetches authorization token and caches it
-$ php artisan powerschool:auth
+php artisan powerschool:auth
 ```
 
 ## API
