@@ -24,6 +24,8 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
                 config('powerschool.client_secret')
             );
         });
+
+        $this->mergeConfigFrom(__DIR__ . '/config.php', 'powerschool');
     }
 
     /**
