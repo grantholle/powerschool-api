@@ -11,24 +11,14 @@ use Illuminate\Support\Facades\Response;
 class Request
 {
     /* @var string */
-    public const AUTH_TOKEN = 'authToken';
+    public const AUTH_TOKEN = 'powerschool_token';
 
-    public $cacheToken;
-
-    /* @var Client */
-    protected $client;
-
-    /* @var string */
-    protected $clientId;
-
-    /* @var string */
-    protected $clientSecret;
-
-    /* @var string */
-    protected $authToken;
-
-    /* @var int */
-    protected $attempts = 0;
+    public bool $cacheToken;
+    protected Client $client;
+    protected string $clientId;
+    protected string $clientSecret;
+    protected string $authToken;
+    protected int $attempts = 0;
 
     /**
      * Creates a new Request object to interact with PS's api
@@ -151,10 +141,7 @@ class Request
         return $this;
     }
 
-    /**
-     * @return Client
-     */
-    public function getClient()
+    public function getClient(): Client
     {
         return $this->client;
     }
