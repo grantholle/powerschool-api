@@ -102,7 +102,7 @@ class Request
      * @return $this
      * @throws MissingClientCredentialsException
      */
-    public function authenticate(bool $force = false)
+    public function authenticate(bool $force = false): static
     {
         // Check if there is already a token and we're not doing a force-retrieval
         if (!$force && $this->authToken) {

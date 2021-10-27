@@ -6,19 +6,19 @@
     "authors": [
         {
             "name": "Grant Holle",
-            "homepage": "http://grantholle.com",
+            "homepage": "https://grantholle.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.0.1",
-        "illuminate/console": "^7.0|^8.0",
-        "illuminate/support": "^7.0|^8.0"
+        "illuminate/console": "^8.0",
+        "illuminate/support": "^8.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^5.4"
+        "orchestra/testbench": "^6.22"
     },
     "autoload": {
         "psr-4": {

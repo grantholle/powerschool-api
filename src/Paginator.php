@@ -18,7 +18,7 @@ class Paginator
         $this->key = $key;
     }
 
-    public function page()
+    public function page(): ?array
     {
         $this->builder->pageSize($this->pageSize)
             ->page($this->page);
@@ -44,7 +44,7 @@ class Paginator
         $this->page += 1;
 
         return empty($records)
-            ? false
+            ? null
             : $records;
     }
 }
