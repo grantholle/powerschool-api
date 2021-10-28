@@ -17,12 +17,12 @@ class RequestBuilder {
     protected ?string $endpoint;
     protected ?string $method;
     protected array $options = [];
-    protected ?array $data;
-    protected ?string $table;
+    protected ?array $data = null;
+    protected ?string $table = null;
     protected array $queryString = [];
-    protected string|int|null $id;
+    protected string|int|null $id = null;
     protected bool $includeProjection = false;
-    protected bool $asResponse = false;
+    protected bool $asJsonResponse = false;
     protected string $pageKey = 'record';
     protected Paginator $paginator;
 
@@ -49,7 +49,7 @@ class RequestBuilder {
         $this->queryString = [];
         $this->id = null;
         $this->includeProjection = false;
-        $this->asResponse = false;
+        $this->asJsonResponse = false;
         unset($this->paginator);
         $this->pageKey = 'record';
 
@@ -484,6 +484,14 @@ class RequestBuilder {
     }
 
     /**
+     * Alias of expansions()
+     */
+    public function withExpansion(string $expansion): static
+    {
+        return $this->expansions($expansion);
+    }
+
+    /**
      * Adds `expansions` query variable
      */
     public function extensions(string|array $extensions): static
@@ -502,13 +510,21 @@ class RequestBuilder {
      */
     public function withExtensions(string|array $extensions): static
     {
-        return $this->expansions($extensions);
+        return $this->extensions($extensions);
+    }
+
+    /**
+     * Alias of extensions()
+     */
+    public function withExtension(string $extension): static
+    {
+        return $this->extensions($extension);
     }
 
     /**
      * Gets the data changes based on the data version subscription
      */
-    public function getDataSubscriptionChanges(string $applicationName, int $version): ?stdClass
+    public function getDataSubscriptionChanges(string $applicationName, int $version): Response
     {
         return $this->endpoint("/ws/dataversion/{$applicationName}/{$version}")
             ->get();
@@ -517,7 +533,7 @@ class RequestBuilder {
     /**
      * Sends a count request to the table api
      */
-    public function count(): ?stdClass
+    public function count(): Response
     {
         $this->endpoint .= '/count';
         $this->includeProjection = false;
@@ -530,7 +546,7 @@ class RequestBuilder {
      */
     public function raw(): static
     {
-        $this->asResponse = false;
+        $this->asJsonResponse = false;
 
         return $this;
     }
@@ -538,9 +554,9 @@ class RequestBuilder {
     /**
      * Sets the flag to return a response
      */
-    public function asResponse(): static
+    public function asJsonResponse(): static
     {
-        $this->asResponse = true;
+        $this->asJsonResponse = true;
 
         return $this;
     }
@@ -663,7 +679,7 @@ class RequestBuilder {
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
      */
-    public function get(string $endpoint = null): ?stdClass
+    public function get(string $endpoint = null): Response
     {
         if ($endpoint) {
             $this->setEndpoint($endpoint);
@@ -675,7 +691,7 @@ class RequestBuilder {
     /**
      * Sets method to post, sugar around setMethod(), then sends the request
      */
-    public function post(): ?stdClass
+    public function post(): Response
     {
         return $this->setMethod(static::POST)->send();
     }
@@ -683,7 +699,7 @@ class RequestBuilder {
     /**
      * Sets method to put, sugar around setMethod(), then sends the request
      */
-    public function put(): ?stdClass
+    public function put(): Response
     {
         return $this->setMethod(static::PUT)->send();
     }
@@ -691,7 +707,7 @@ class RequestBuilder {
     /**
      * Sets method to patch, sugar around setMethod(), then sends the request
      */
-    public function patch(): ?stdClass
+    public function patch(): Response
     {
         return $this->setMethod(static::PATCH)->send();
     }
@@ -699,7 +715,7 @@ class RequestBuilder {
     /**
      * Sets method to delete, sugar around setMethod(), then sends the request
      */
-    public function delete(): ?stdClass
+    public function delete(): Response
     {
         return $this->setMethod(static::DELETE)->send();
     }
@@ -707,18 +723,19 @@ class RequestBuilder {
     /**
      * Sends the request to PowerSchool
      */
-    public function send(bool $reset = true): ?stdClass
+    public function send(bool $reset = true): Response
     {
         $this->buildRequestJson()
             ->buildRequestQuery();
 
-        $response = $this->getRequest()
+        $responseData = $this->getRequest()
             ->makeRequest(
                 $this->method,
                 $this->endpoint,
                 $this->options,
-                $this->asResponse
+                $this->asJsonResponse
             );
+        $response = new Response($responseData, $this->pageKey);
 
         if ($reset) {
             $this->freshen();
@@ -730,10 +747,10 @@ class RequestBuilder {
     /**
      * This will return a chunk of data from PS
      */
-    public function paginate(int $pageSize = 100): ?array
+    public function paginate(int $pageSize = 100): ?Response
     {
         if (!isset($this->paginator)) {
-            $this->paginator = new Paginator($this, 1, $pageSize, $this->pageKey);
+            $this->paginator = new Paginator($this, $pageSize);
         }
 
         $results = $this->paginator->page();

@@ -18,7 +18,8 @@
         "illuminate/support": "^8.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.22"
+        "orchestra/testbench": "^6.22",
+        "spatie/ray": "^1.30"
     },
     "autoload": {
         "psr-4": {

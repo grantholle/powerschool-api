@@ -306,7 +306,7 @@ RequestBuilder::DELETE;
 
 #### `send()`
 
-Sends the request using the verb set. By default will return the results from the query. You can also call `asResponse()` prior to sending to get the `Response` json which could be returned to the client.
+Sends the request using the verb set. By default will return the results from the query. You can also call `asJsonResponse()` prior to sending to get an instance of Laravel's `JsonResponse` class which could be returned directly to the client.
 
 #### `count()`
 

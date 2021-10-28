@@ -4,9 +4,10 @@ namespace GrantHolle\PowerSchool\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response as LaravelResponse;
 
 class Request
 {
@@ -42,16 +43,8 @@ class Request
 
     /**
      * Makes an api call to PowerSchool
-     *
-     * @param string $method The HTTP method to use
-     * @param string $endpoint The api endpoint to call
-     * @param array $options The HTTP options
-     * @param bool $returnResponse Return a response or just decoded
-     * @return mixed
-     * @throws MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false)
+    public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false): JsonResponse|array
     {
         $this->authenticate();
         $this->attempts++;
@@ -82,14 +75,17 @@ class Request
                     ->makeRequest($method, $endpoint, $options);
             }
 
+            ray($response->getStatusCode());
+            ray()->json($response->getBody()->getContents());
+
             throw $exception;
         }
 
         $this->attempts = 0;
-        $body = json_decode($response->getBody()->getContents());
+        $body = json_decode($response->getBody()->getContents(), true);
 
         if ($returnResponse) {
-            return Response::json($body, $response->getStatusCode());
+            return LaravelResponse::json($body, $response->getStatusCode());
         }
 
         return $body;
@@ -100,7 +96,7 @@ class Request
      *
      * @param boolean $force Force authentication even if there is an existing token
      * @return $this
-     * @throws MissingClientCredentialsException
+     * @throws MissingClientCredentialsException|\GuzzleHttp\Exception\GuzzleException
      */
     public function authenticate(bool $force = false): static
     {
