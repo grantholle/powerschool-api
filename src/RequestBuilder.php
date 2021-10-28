@@ -125,13 +125,8 @@ class RequestBuilder {
     /**
      * Configures the request to be a core resource with optional method and data that
      * will send the request automatically.
-     *
-     * @param string $endpoint
-     * @param string|null $method
-     * @param array $data
-     * @return array|RequestBuilder
      */
-    public function resource(string $endpoint, string $method = null, array $data = [])
+    public function resource(string $endpoint, string $method = null, array $data = []): null|stdClass|static
     {
         $this->endpoint = $endpoint;
         $this->includeProjection = false;
