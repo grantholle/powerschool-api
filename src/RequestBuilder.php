@@ -3,6 +3,7 @@
 namespace GrantHolle\PowerSchool\Api;
 
 use Illuminate\Support\Str;
+use stdClass;
 
 class RequestBuilder {
 
@@ -511,12 +512,8 @@ class RequestBuilder {
 
     /**
      * Gets the data changes based on the data version subscription
-     *
-     * @param string $applicationName
-     * @param int $version
-     * @throws Exception\MissingClientCredentialsException
      */
-    public function getDataSubscriptionChanges(string $applicationName, int $version)
+    public function getDataSubscriptionChanges(string $applicationName, int $version): ?stdClass
     {
         return $this->endpoint("/ws/dataversion/{$applicationName}/{$version}")
             ->get();
@@ -524,10 +521,8 @@ class RequestBuilder {
 
     /**
      * Sends a count request to the table api
-     *
-     * @return mixed
      */
-    public function count()
+    public function count(): ?stdClass
     {
         $this->endpoint .= '/count';
         $this->includeProjection = false;
@@ -537,10 +532,8 @@ class RequestBuilder {
 
     /**
      * Sets a flag to return as a decoded json rather than an Illuminate\Response
-     *
-     * @return RequestBuilder
      */
-    public function raw()
+    public function raw(): static
     {
         $this->asResponse = false;
 
@@ -549,10 +542,8 @@ class RequestBuilder {
 
     /**
      * Sets the flag to return a response
-     *
-     * @return RequestBuilder
      */
-    public function asResponse()
+    public function asResponse(): static
     {
         $this->asResponse = true;
 
@@ -676,13 +667,8 @@ class RequestBuilder {
 
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
-     *
-     * @param string|null $endpoint
-     * @return \stdClass
-     * @throws Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(string $endpoint = null)
+    public function get(string $endpoint = null): ?stdClass
     {
         if ($endpoint) {
             $this->setEndpoint($endpoint);
@@ -693,61 +679,40 @@ class RequestBuilder {
 
     /**
      * Sets method to post, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function post()
+    public function post(): ?stdClass
     {
         return $this->setMethod(static::POST)->send();
     }
 
     /**
      * Sets method to put, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function put()
+    public function put(): ?stdClass
     {
         return $this->setMethod(static::PUT)->send();
     }
 
     /**
      * Sets method to patch, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function patch()
+    public function patch(): ?stdClass
     {
         return $this->setMethod(static::PATCH)->send();
     }
 
     /**
      * Sets method to delete, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function delete()
+    public function delete(): ?stdClass
     {
         return $this->setMethod(static::DELETE)->send();
     }
 
     /**
      * Sends the request to PowerSchool
-     *
-     * @param bool $reset
-     * @return \stdClass
-     * @throws Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send(bool $reset = true)
+    public function send(bool $reset = true): ?stdClass
     {
         $this->buildRequestJson()
             ->buildRequestQuery();
