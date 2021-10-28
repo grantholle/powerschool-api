@@ -36,7 +36,7 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
         // Publish the configuration and migration
         $this->publishes([
             __DIR__ . '/config.php' => config_path('powerschool.php'),
-        ], 'config');
+        ], ['config', 'powerschool-config']);
 
         // Commands
         if ($this->app->runningInConsole()) {
