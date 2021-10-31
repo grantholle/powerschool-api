@@ -11,6 +11,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Cache\CacheServiceProvider;
+use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Support\Facades\Cache;
 use Orchestra\Testbench\TestCase;
 
@@ -18,18 +19,20 @@ class PowerSchoolTest extends TestCase
 {
     protected $accessor;
 
+    const CACHE_KEY = 'powerschool_token';
     const AUTH_TOKEN = '672d3201-c925-4e74-9418-985463e60654';
     const CONSTRUCTOR_ARGS = [
         'https://test.powerschool.com',
         '45d8d083-40e1-43da-904f-94c91968523d',
         '86954e3d-49cb-41ba-80e9-cd17d4772f89',
+        'powerschool_token',
     ];
 
     public function setUp(): void
     {
         parent::setUp();
         $this->accessor = new AccessorToPrivate();
-        Cache::forget(Request::AUTH_TOKEN);
+        Cache::forget(static::CACHE_KEY);
     }
 
     protected function getApplicationProviders($application)
@@ -37,6 +40,7 @@ class PowerSchoolTest extends TestCase
         return [
             PowerSchoolApiServiceProvider::class,
             CacheServiceProvider::class,
+            FilesystemServiceProvider::class,
         ];
     }
 
@@ -179,7 +183,7 @@ class PowerSchoolTest extends TestCase
         $request->authenticate();
 
         $this->assertEquals(self::AUTH_TOKEN, $this->accessor->get($request, 'authToken')());
-        $this->assertEquals(self::AUTH_TOKEN, Cache::get(Request::AUTH_TOKEN));
+        $this->assertEquals(self::AUTH_TOKEN, Cache::get(static::CACHE_KEY));
     }
 
     public function test_performs_auth_request_before_query()

@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 use stdClass;
 
 class RequestBuilder {
-
     const GET = 'get';
     const POST = 'post';
     const PUT = 'put';
@@ -26,9 +25,9 @@ class RequestBuilder {
     protected string $pageKey = 'record';
     protected Paginator $paginator;
 
-    public function __construct(string $serverAddress, string $clientId, string $clientSecret, bool $cacheToken = true)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret, ?string $cacheKey = 'powerschool_token')
     {
-        $this->request = new Request($serverAddress, $clientId, $clientSecret, $cacheToken);
+        $this->request = new Request($serverAddress, $clientId, $clientSecret, $cacheKey);
     }
 
     public function getRequest(): Request

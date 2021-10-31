@@ -11,10 +11,7 @@ use Illuminate\Support\Facades\Response as LaravelResponse;
 
 class Request
 {
-    /* @var string */
-    public const AUTH_TOKEN = 'powerschool_token';
-
-    public bool $cacheToken;
+    public ?string $cacheKey;
     protected Client $client;
     protected string $clientId;
     protected string $clientSecret;
@@ -27,17 +24,17 @@ class Request
      * @param string $serverAddress The url of the server
      * @param string $clientId The client id obtained from installing a plugin with oauth enabled
      * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
-     * @param bool $cacheToken
+     * @param string|null $cacheKey The key for the cache
      */
-    public function __construct(string $serverAddress, string $clientId, string $clientSecret, bool $cacheToken = true)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret, ?string $cacheKey)
     {
         $this->client = new Client(['base_uri' => $serverAddress]);
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->cacheToken = $cacheToken;
+        $this->cacheKey = $cacheKey;
 
-        if ($this->cacheToken) {
-            $this->authToken = Cache::get(self::AUTH_TOKEN, false);
+        if ($this->cacheKey) {
+            $this->authToken = Cache::get($this->cacheKey, false);
         }
     }
 
@@ -88,7 +85,7 @@ class Request
             return LaravelResponse::json($body, $response->getStatusCode());
         }
 
-        return $body;
+        return $body ?? [];
     }
 
     /**
@@ -130,8 +127,8 @@ class Request
         // Set and cache the auth token
         $this->authToken = $json->access_token;
 
-        if ($this->cacheToken) {
-            Cache::put(self::AUTH_TOKEN, $this->authToken, now()->addSeconds($json->expires_in));
+        if ($this->cacheKey) {
+            Cache::put($this->cacheKey, $this->authToken, now()->addSeconds($json->expires_in));
         }
 
         return $this;
