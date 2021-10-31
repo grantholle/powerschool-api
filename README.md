@@ -4,6 +4,11 @@ Taking inspiration from Laravel's database and Eloquent `Builder` class, this al
 
 This package is to be used with alongside a PowerSchool plugin that has enabled `<oauth/>` in the `plugin.xml`. This guide assumes you have PowerSchool API and plugin knowledge and does not cover the details of a plugin or its API.
 
+## Breaking changes for v3
+
+- Requires PHP ^8.0
+- Requests return a new `Response` instead of `stdClass`, [see below](#responses) for details
+
 ## Breaking changes for v2
 
 - SSO functionality has been abstracted to a new package, [`grantholle/laravel-powerschool-auth`](https://github.com/grantholle/laravel-powerschool-auth) 
@@ -389,6 +394,43 @@ while ($records = $builder->paginate(25)) {
 }
 ```
 
+## Responses
+
+Prior to `v3`, API requests returned a simple `stdClass` instance containing the raw response from PowerSchool. Since `v3`, there's a new `GrantHolle\PowerSchool\Api\Response` class that gets returned.
+
+## Singular responses
+
+Some responses are meant to return a single record, such as a response for `/ws/contacts/contact/{id}`. For these responses, the properties can be accessed just like before.
+
+```php
+$response = PowerSchool::to('/ws/contacts/contact/123')
+    ->get();
+
+$response->contactId; // 123
+```
+
+The `@extensions` and `@expansions` fields will be parsed into `$extensions` and `$expansions` properties as arrays.
+
+```php
+$response->extensions;
+//[
+//    "personcorefields",
+//]
+```
+
+## List responses
+
+For the responses that return a listing of results, the `Response` can be iterated using `foreach`. You don't need to worry about the property nesting, as the response will be inferred from the type of response.
+
+```php
+$results = PowerSchool::to('/ws/v1/district/school')
+    ->get();
+
+ foreach ($results as $result) {
+     // $result will be a school object
+ }
+```
+
 ## License
 
 [MIT](LICENSE)
@@ -398,5 +440,5 @@ while ($records = $builder->paginate(25)) {
 Thanks for taking the time to submit an issue or pull request. If it's a new feature, do your best to add a test to cover the functionality. Then run:
 
 ```bash
-➜ ./vendor/bin/phpunit
+./vendor/bin/phpunit
 ```
