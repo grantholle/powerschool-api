@@ -20,7 +20,8 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
         $this->app->bind(RequestBuilder::class, fn () => new RequestBuilder(
             config('powerschool.server_address'),
             config('powerschool.client_id'),
-            config('powerschool.client_secret')
+            config('powerschool.client_secret'),
+            config('powerschool.cache_key')
         ));
 
         $this->mergeConfigFrom(__DIR__ . '/config.php', 'powerschool');
