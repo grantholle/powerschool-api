@@ -4,16 +4,14 @@ namespace GrantHolle\PowerSchool\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response as LaravelResponse;
 
 class Request
 {
-    /* @var string */
-    public const AUTH_TOKEN = 'powerschool_token';
-
-    public bool $cacheToken;
+    public ?string $cacheKey;
     protected Client $client;
     protected string $clientId;
     protected string $clientSecret;
@@ -26,32 +24,24 @@ class Request
      * @param string $serverAddress The url of the server
      * @param string $clientId The client id obtained from installing a plugin with oauth enabled
      * @param string $clientSecret The client secret obtained from installing a plugin with oauth enabled
-     * @param bool $cacheToken
+     * @param string|null $cacheKey The key for the cache
      */
-    public function __construct(string $serverAddress, string $clientId, string $clientSecret, bool $cacheToken = true)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret, ?string $cacheKey)
     {
         $this->client = new Client(['base_uri' => $serverAddress]);
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->cacheToken = $cacheToken;
+        $this->cacheKey = $cacheKey;
 
-        if ($this->cacheToken) {
-            $this->authToken = Cache::get(self::AUTH_TOKEN, false);
+        if ($this->cacheKey) {
+            $this->authToken = Cache::get($this->cacheKey, false);
         }
     }
 
     /**
      * Makes an api call to PowerSchool
-     *
-     * @param string $method The HTTP method to use
-     * @param string $endpoint The api endpoint to call
-     * @param array $options The HTTP options
-     * @param bool $returnResponse Return a response or just decoded
-     * @return mixed
-     * @throws MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false)
+    public function makeRequest(string $method, string $endpoint, array $options, bool $returnResponse = false): JsonResponse|array
     {
         $this->authenticate();
         $this->attempts++;
@@ -82,17 +72,20 @@ class Request
                     ->makeRequest($method, $endpoint, $options);
             }
 
+            ray($response->getStatusCode());
+            ray()->json($response->getBody()->getContents());
+
             throw $exception;
         }
 
         $this->attempts = 0;
-        $body = json_decode($response->getBody()->getContents());
+        $body = json_decode($response->getBody()->getContents(), true);
 
         if ($returnResponse) {
-            return Response::json($body, $response->getStatusCode());
+            return LaravelResponse::json($body, $response->getStatusCode());
         }
 
-        return $body;
+        return $body ?? [];
     }
 
     /**
@@ -100,9 +93,9 @@ class Request
      *
      * @param boolean $force Force authentication even if there is an existing token
      * @return $this
-     * @throws MissingClientCredentialsException
+     * @throws MissingClientCredentialsException|\GuzzleHttp\Exception\GuzzleException
      */
-    public function authenticate(bool $force = false)
+    public function authenticate(bool $force = false): static
     {
         // Check if there is already a token and we're not doing a force-retrieval
         if (!$force && $this->authToken) {
@@ -134,8 +127,8 @@ class Request
         // Set and cache the auth token
         $this->authToken = $json->access_token;
 
-        if ($this->cacheToken) {
-            Cache::put(self::AUTH_TOKEN, $this->authToken, now()->addSeconds($json->expires_in));
+        if ($this->cacheKey) {
+            Cache::put($this->cacheKey, $this->authToken, now()->addSeconds($json->expires_in));
         }
 
         return $this;

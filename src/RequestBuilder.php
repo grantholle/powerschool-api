@@ -2,79 +2,43 @@
 
 namespace GrantHolle\PowerSchool\Api;
 
-class RequestBuilder {
+use Illuminate\Support\Str;
+use stdClass;
 
+class RequestBuilder {
     const GET = 'get';
     const POST = 'post';
     const PUT = 'put';
     const PATCH = 'patch';
     const DELETE = 'delete';
 
-    /* @var Request */
-    protected $request;
-
-    /* @var string */
-    protected $endpoint;
-
-    /* @var string */
-    protected $method;
-
-    /* @var array */
-    protected $options = [];
-
-    /* @var array */
-    protected $data;
-
-    /* @var string */
-    protected $table;
-
-    /* @var string */
-    protected $queryString = [];
-
-    /* @var string */
-    protected $id;
-
-    /* @var bool */
-    protected $includeProjection = false;
-
-    /* @var bool */
-    protected $asResponse = false;
-
-    /** @var string */
+    protected Request $request;
+    protected ?string $endpoint;
+    protected ?string $method;
+    protected array $options = [];
+    protected ?array $data = null;
+    protected ?string $table = null;
+    protected array $queryString = [];
+    protected string|int|null $id = null;
+    protected bool $includeProjection = false;
+    protected bool $asJsonResponse = false;
     protected string $pageKey = 'record';
+    protected Paginator $paginator;
 
-    /** @var Paginator */
-    protected $paginator;
-
-    /**
-     * Constructor
-     *
-     * @param string|null $serverAddress
-     * @param string|null $clientId
-     * @param string|null $clientSecret
-     * @param bool $cacheToken
-     */
-    public function __construct(string $serverAddress = null, string $clientId = null, string $clientSecret = null, bool $cacheToken = true)
+    public function __construct(string $serverAddress, string $clientId, string $clientSecret, ?string $cacheKey = 'powerschool_token')
     {
-        $this->request = new Request($serverAddress, $clientId, $clientSecret, $cacheToken);
+        $this->request = new Request($serverAddress, $clientId, $clientSecret, $cacheKey);
     }
 
-    /**
-     * Gets the underlying request object
-     *
-     * @return Request
-     */
-    public function getRequest()
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
     /**
      * Cleans all the variables for the next request
-     *
-     * @return void
      */
-    public function freshen()
+    public function freshen(): static
     {
         $this->endpoint = null;
         $this->method = null;
@@ -84,21 +48,22 @@ class RequestBuilder {
         $this->queryString = [];
         $this->id = null;
         $this->includeProjection = false;
-        $this->asResponse = false;
+        $this->asJsonResponse = false;
         unset($this->paginator);
         $this->pageKey = 'record';
+
+        return $this;
     }
 
     /**
      * Sets the table for a request against a custom table
-     *
-     * @param string $table
-     * @return RequestBuilder
      */
-    public function setTable(string $table)
+    public function setTable(string $table): static
     {
         $this->table = $table;
-        $this->endpoint = '/ws/schema/table/' . $table;
+        $this->endpoint = Str::startsWith($table, '/')
+            ? $table
+            : '/ws/schema/table/' . $table;
         $this->includeProjection = true;
         $this->pageKey = 'record';
 
@@ -106,45 +71,33 @@ class RequestBuilder {
     }
 
     /**
-     * Alias for setTable()
-     *
-     * @param string $table
-     * @return RequestBuilder
+     * @see setTable
      */
-    public function table(string $table)
+    public function table(string $table): static
     {
         return $this->setTable($table);
     }
 
     /**
-     * Alias for setTable()
-     *
-     * @param string $table
-     * @return RequestBuilder
+     * @see setTable
      */
-    public function forTable(string $table)
+    public function forTable(string $table): static
     {
         return $this->setTable($table);
     }
 
     /**
-     * Alias for setTable()
-     *
-     * @param string $table
-     * @return RequestBuilder
+     * @see setTable
      */
-    public function againstTable(string $table)
+    public function againstTable(string $table): static
     {
         return $this->setTable($table);
     }
 
     /**
      * Sets the id of the resource we're interacting with
-     *
-     * @param mixed $id
-     * @return RequestBuilder
      */
-    public function setId($id)
+    public function setId(string|int $id): static
     {
         $this->endpoint .= '/' . $id;
         $this->id = $id;
@@ -153,23 +106,17 @@ class RequestBuilder {
     }
 
     /**
-     * Alias for setId()
-     *
-     * @param mixed $id
-     * @return RequestBuilder
+     * @see setId
      */
-    public function id($id)
+    public function id(string|int $id): static
     {
         return $this->setId($id);
     }
 
     /**
-     * Alias for setId()
-     *
-     * @param mixed $id
-     * @return RequestBuilder
+     * @see setId
      */
-    public function forId($id)
+    public function forId(string|int $id): static
     {
         return $this->setId($id);
     }
@@ -177,13 +124,8 @@ class RequestBuilder {
     /**
      * Configures the request to be a core resource with optional method and data that
      * will send the request automatically.
-     *
-     * @param string $endpoint
-     * @param string|null $method
-     * @param array $data
-     * @return array|RequestBuilder
      */
-    public function resource(string $endpoint, string $method = null, array $data = [])
+    public function resource(string $endpoint, string $method = null, array $data = []): null|stdClass|static
     {
         $this->endpoint = $endpoint;
         $this->includeProjection = false;
@@ -206,10 +148,8 @@ class RequestBuilder {
 
     /**
      * Does not force a projection parameter for GET requests
-     *
-     * @return RequestBuilder
      */
-    public function excludeProjection()
+    public function excludeProjection(): static
     {
         $this->includeProjection = false;
 
@@ -217,59 +157,44 @@ class RequestBuilder {
     }
 
     /**
-     * Alias of excludeProjection()
-     *
-     * @return $this
+     * @see excludeProjection
      */
-    public function withoutProjection()
+    public function withoutProjection(): static
     {
         return $this->excludeProjection();
     }
 
     /**
      * Sets the endpoint for the request
-     *
-     * @param string $endpoint
-     * @return RequestBuilder
      */
-    public function setEndpoint(string $endpoint)
+    public function setEndpoint(string $endpoint): static
     {
         $this->endpoint = $endpoint;
-        $pieces = explode('/', $endpoint);
-        $this->pageKey = end($pieces);
+        $this->pageKey = Str::afterLast($endpoint, '/');
 
         return $this->excludeProjection();
     }
 
     /**
-     * Alias for setEndpoint()
-     *
-     * @param string $endpoint
-     * @return RequestBuilder
+     * @see setEndpoint
      */
-    public function toEndpoint(string $endpoint)
+    public function toEndpoint(string $endpoint): static
     {
         return $this->setEndpoint($endpoint);
     }
 
     /**
-     * Alias for setEndpoint()
-     *
-     * @param string $endpoint
-     * @return RequestBuilder
+     * @see setEndpoint
      */
-    public function to(string $endpoint)
+    public function to(string $endpoint): static
     {
         return $this->setEndpoint($endpoint);
     }
 
     /**
-     * Alias for setEndpoint()
-     *
-     * @param string $endpoint
-     * @return RequestBuilder
+     * @see setEndpoint
      */
-    public function endpoint(string $endpoint)
+    public function endpoint(string $endpoint): static
     {
         return $this->setEndpoint($endpoint);
     }
@@ -283,16 +208,18 @@ class RequestBuilder {
      */
     public function setNamedQuery(string $query, array $data = [])
     {
-        $this->endpoint = '/ws/schema/query/' . $query;
+        $this->endpoint = Str::startsWith($query, '/')
+            ? $query
+            : '/ws/schema/query/' . $query;
         $this->pageKey = 'record';
 
         // If there's data along with it,
-        // it's short hand for sending the request
+        // it's shorthand for sending the request
         if (!empty($data)) {
             return $this->withData($data)->post();
         }
 
-        // By default don't include the projection unless
+        // By default, don't include the projection unless
         // it gets added later explicitly
         $this->includeProjection = false;
 
@@ -339,11 +266,8 @@ class RequestBuilder {
      * Sets the data for the post/put/patch requests
      * Also performs basic sanitation for PS, such
      * as bool translation
-     *
-     * @param array $data
-     * @return RequestBuilder
      */
-    public function setData(array $data)
+    public function setData(array $data): static
     {
         $this->data = $this->castToValuesString($data);
 
@@ -352,34 +276,24 @@ class RequestBuilder {
 
     /**
      * Alias for setData()
-     *
-     * @param array $data
-     * @return RequestBuilder
      */
-    public function withData(array $data)
+    public function withData(array $data): static
     {
         return $this->setData($data);
     }
 
     /**
      * Alias for setData()
-     *
-     * @param array $data
-     * @return RequestBuilder
      */
-    public function with(array $data)
+    public function with(array $data): static
     {
         return $this->setData($data);
     }
 
     /**
      * Sets an item to be included in the post request
-     *
-     * @param string $key
-     * @param $value
-     * @return $this
      */
-    public function setDataItem(string $key, $value)
+    public function setDataItem(string $key, $value): static
     {
         $this->data[$key] = $this->castToValuesString($value);
 
@@ -388,11 +302,8 @@ class RequestBuilder {
 
     /**
      * Sets the query string for get requests
-     *
-     * @param mixed $queryString
-     * @return RequestBuilder
      */
-    public function withQueryString($queryString)
+    public function withQueryString(string|array $queryString): static
     {
         if (is_array($queryString)) {
             $this->queryString = $queryString;
@@ -407,36 +318,26 @@ class RequestBuilder {
 
     /**
      * Alias of withQueryString()
-     *
-     * @param mixed $queryString
-     * @return RequestBuilder
      */
-    public function query($queryString)
+    public function query(string|array $queryString): static
     {
         return $this->withQueryString($queryString);
     }
 
     /**
-     * Adds a variable to the query string array
-     *
-     * @param string $key
-     * @param mixed $val
-     * @return RequestBuilder
+     * Adds a variable to the query string
      */
-    public function addQueryVar(string $key, $val)
+    public function addQueryVar(string $key, $value): static
     {
-        $this->queryString[$key] = $val;
+        $this->queryString[$key] = $value;
 
         return $this;
     }
 
     /**
      * Checks to see if a query variable has been set
-     *
-     * @param string $key
-     * @return bool
      */
-    public function hasQueryVar(string $key)
+    public function hasQueryVar(string $key): bool
     {
         return isset($this->queryString[$key]) &&
             !empty($this->queryString[$key]);
@@ -444,55 +345,40 @@ class RequestBuilder {
 
     /**
      * Syntactic sugar for the q query string var
-     *
-     * @param string $query
-     * @return RequestBuilder
      */
-    public function q(string $query)
+    public function q(string $query): static
     {
         return $this->addQueryVar('q', $query);
     }
 
     /**
      * Sugar for q()
-     *
-     * @param string $expression
-     * @return RequestBuilder
      */
-    public function queryExpression(string $expression)
+    public function queryExpression(string $expression): static
     {
         return $this->q($expression);
     }
 
     /**
      * Adds an ad-hoc filter expression, meant to be used for PowerQueries
-     *
-     * @param string $expression
-     * @return $this
      */
-    public function adHocFilter(string $expression)
+    public function adHocFilter(string $expression): static
     {
         return $this->addQueryVar('$q', $expression);
     }
 
     /**
      * Sugar for adHocFilter()
-     *
-     * @param string $expression
-     * @return $this
      */
-    public function filter(string $expression)
+    public function filter(string $expression): static
     {
         return $this->adHocFilter($expression);
     }
 
     /**
      * Syntactic sugar for the projection query string var
-     *
-     * @param string|array $projection
-     * @return RequestBuilder
      */
-    public function projection($projection)
+    public function projection(string|array $projection): static
     {
         if (is_array($projection)) {
             $projection = implode(',', $projection);
@@ -503,35 +389,25 @@ class RequestBuilder {
     }
 
     /**
-     * Syntactic sugar for the pagesize query string var
-     *
-     * @param int $pageSize
-     * @return RequestBuilder
+     * Syntactic sugar for the `pagesize` query string var
      */
-    public function pageSize(int $pageSize)
+    public function pageSize(int $pageSize): static
     {
         return $this->addQueryVar('pagesize', $pageSize);
     }
 
     /**
      * Sets the page query variable
-     *
-     * @param int $page
-     * @return RequestBuilder
      */
-    public function page(int $page)
+    public function page(int $page): static
     {
         return $this->addQueryVar('page', $page);
     }
 
     /**
      * Sets the sorting columns and direction for the request
-     *
-     * @param string|array $columns
-     * @param bool $descending
-     * @return RequestBuilder
      */
-    public function sort($columns, bool $descending = false)
+    public function sort(string|array $columns, bool $descending = false): static
     {
         $sort = is_array($columns)
             ? implode(',', $columns)
@@ -545,71 +421,49 @@ class RequestBuilder {
 
     /**
      * Adds an order query string variable
-     *
-     * @param string $expression
-     * @return $this
      */
-    public function adHocOrder(string $expression)
+    public function adHocOrder(string $expression): static
     {
         return $this->addQueryVar('order', $expression);
     }
 
     /**
-     * Sugar for adHocOrder()
-     *
-     * @param string $expression
-     * @return $this
-     * @see RequestBuilder::adHocOrder()
+     * @see adHocOrder()
      */
-    public function order(string $expression)
+    public function order(string $expression): static
     {
         return $this->adHocOrder($expression);
     }
 
     /**
-     * Adds the count query variable for
-     *
-     * @return $this
+     * Adds the count query variable for PowerQueries
      */
-    public function includeCount()
+    public function includeCount(): static
     {
         return $this->addQueryVar('count', 'true');
     }
 
     /**
      * Configures the data version for the PowerQuery
-     *
-     * @param int $version
-     * @param string $applicationName
-     * @return $this
      */
-    public function dataVersion(int $version, string $applicationName)
+    public function dataVersion(int $version, string $applicationName): static
     {
-        $this->setDataItem('$dataversion', $version);
-        $this->setDataItem('$dataversion_applicationname', $applicationName);
-
-        return $this;
+        return $this->setDataItem('$dataversion', $version)
+            ->setDataItem('$dataversion_applicationname', $applicationName);
     }
 
     /**
      * Alias of dataVersion()
-     *
-     * @param int $version
-     * @param string $applicationName
-     * @return $this
      */
-    public function withDataVersion(int $version, string $applicationName)
+    public function withDataVersion(int $version, string $applicationName): static
     {
         return $this->dataVersion($version, $applicationName);
     }
 
     /**
      * Adds `expansions` query variable
-     *
-     * @param string|array $expansions
-     * @return $this
      */
-    public function expansions($expansions)
+    public function expansions(string|array $expansions): static
     {
         $expansions = is_array($expansions)
             ? implode(',', $expansions)
@@ -622,22 +476,24 @@ class RequestBuilder {
 
     /**
      * Alias of expansions()
-     *
-     * @param string|array $expansions
-     * @return $this
      */
-    public function withExpansions($expansions)
+    public function withExpansions(string|array $expansions): static
     {
         return $this->expansions($expansions);
     }
 
     /**
-     * Adds `expansions` query variable
-     *
-     * @param string|array $extensions
-     * @return $this
+     * Alias of expansions()
      */
-    public function extensions($extensions)
+    public function withExpansion(string $expansion): static
+    {
+        return $this->expansions($expansion);
+    }
+
+    /**
+     * Adds `expansions` query variable
+     */
+    public function extensions(string|array $extensions): static
     {
         $extensions = is_array($extensions)
             ? implode(',', $extensions)
@@ -650,24 +506,24 @@ class RequestBuilder {
 
     /**
      * Alias of expansions()
-     *
-     * @param string|array $extensions
-     * @return $this
      */
-    public function withExtensions($extensions)
+    public function withExtensions(string|array $extensions): static
     {
-        return $this->expansions($extensions);
+        return $this->extensions($extensions);
+    }
+
+    /**
+     * Alias of extensions()
+     */
+    public function withExtension(string $extension): static
+    {
+        return $this->extensions($extension);
     }
 
     /**
      * Gets the data changes based on the data version subscription
-     *
-     * @param string $applicationName
-     * @param int $version
-     * @return array
-     * @throws Exception\MissingClientCredentialsException
      */
-    public function getDataSubscriptionChanges(string $applicationName, int $version)
+    public function getDataSubscriptionChanges(string $applicationName, int $version): Response
     {
         return $this->endpoint("/ws/dataversion/{$applicationName}/{$version}")
             ->get();
@@ -675,10 +531,8 @@ class RequestBuilder {
 
     /**
      * Sends a count request to the table api
-     *
-     * @return mixed
      */
-    public function count()
+    public function count(): Response
     {
         $this->endpoint .= '/count';
         $this->includeProjection = false;
@@ -688,35 +542,29 @@ class RequestBuilder {
 
     /**
      * Sets a flag to return as a decoded json rather than an Illuminate\Response
-     *
-     * @return RequestBuilder
      */
-    public function raw()
+    public function raw(): static
     {
-        $this->asResponse = false;
+        $this->asJsonResponse = false;
 
         return $this;
     }
 
     /**
      * Sets the flag to return a response
-     *
-     * @return RequestBuilder
      */
-    public function asResponse()
+    public function asJsonResponse(): static
     {
-        $this->asResponse = true;
+        $this->asJsonResponse = true;
 
         return $this;
     }
 
     /**
      * Casts all the values recursively as a string
-     *
-     * @param array $data
-     * @return array
      */
-    protected function castToValuesString(array $data) {
+    protected function castToValuesString(array $data): array
+    {
         foreach ($data as $key => $value) {
             // Recursively set the nested array values
             if (is_array($value)) {
@@ -745,10 +593,8 @@ class RequestBuilder {
 
     /**
      * Builds the dumb request structure for PowerSchool
-     *
-     * @return RequestBuilder
      */
-    public function buildRequestJson()
+    public function buildRequestJson(): static
     {
         if ($this->method === static::GET || $this->method === 'delete') {
             return $this;
@@ -780,10 +626,8 @@ class RequestBuilder {
 
     /**
      * Builds the query string for the request
-     *
-     * @return RequestBuilder
      */
-    public function buildRequestQuery()
+    public function buildRequestQuery(): static
     {
         // Build the query by hand
         if ($this->method !== static::GET && $this->method !== static::POST) {
@@ -815,11 +659,8 @@ class RequestBuilder {
 
     /**
      * Sets the request method
-     *
-     * @param string $method
-     * @return RequestBuilder
      */
-    public function setMethod(string $method)
+    public function setMethod(string $method): static
     {
         $this->method = $method;
 
@@ -828,24 +669,16 @@ class RequestBuilder {
 
     /**
      * Alias for setMethod()
-     *
-     * @param string $method
-     * @return RequestBuilder
      */
-    public function method(string $method)
+    public function method(string $method): static
     {
         return $this->setMethod($method);
     }
 
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
-     *
-     * @param string|null $endpoint
-     * @return \stdClass
-     * @throws Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(string $endpoint = null)
+    public function get(string $endpoint = null): Response
     {
         if ($endpoint) {
             $this->setEndpoint($endpoint);
@@ -856,72 +689,52 @@ class RequestBuilder {
 
     /**
      * Sets method to post, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function post()
+    public function post(): Response
     {
         return $this->setMethod(static::POST)->send();
     }
 
     /**
      * Sets method to put, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function put()
+    public function put(): Response
     {
         return $this->setMethod(static::PUT)->send();
     }
 
     /**
      * Sets method to patch, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function patch()
+    public function patch(): Response
     {
         return $this->setMethod(static::PATCH)->send();
     }
 
     /**
      * Sets method to delete, sugar around setMethod(), then sends the request
-     *
-     * @return array
-     * @throws \GrantHolle\PowerSchool\Api\Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function delete()
+    public function delete(): Response
     {
         return $this->setMethod(static::DELETE)->send();
     }
 
     /**
      * Sends the request to PowerSchool
-     *
-     * @param bool $reset
-     * @return \stdClass
-     * @throws Exception\MissingClientCredentialsException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send(bool $reset = true)
+    public function send(bool $reset = true): Response
     {
         $this->buildRequestJson()
             ->buildRequestQuery();
 
-        $response = $this->getRequest()
+        $responseData = $this->getRequest()
             ->makeRequest(
                 $this->method,
                 $this->endpoint,
                 $this->options,
-                $this->asResponse
+                $this->asJsonResponse
             );
+        $response = new Response($responseData, $this->pageKey);
 
         if ($reset) {
             $this->freshen();
@@ -932,20 +745,16 @@ class RequestBuilder {
 
     /**
      * This will return a chunk of data from PS
-     * NOTE: this is currently only supported by PowerQueries
-     *
-     * @param int $pageSize
-     * @return array|false
      */
-    public function paginate(int $pageSize = 100)
+    public function paginate(int $pageSize = 100): ?Response
     {
         if (!isset($this->paginator)) {
-            $this->paginator = new Paginator($this, 1, $pageSize, $this->pageKey);
+            $this->paginator = new Paginator($this, $pageSize);
         }
 
         $results = $this->paginator->page();
 
-        if ($results === false) {
+        if ($results === null) {
             $this->freshen();
         }
 

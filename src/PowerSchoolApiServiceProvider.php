@@ -17,13 +17,11 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(RequestBuilder::class, function ($app) {
-            return new RequestBuilder(
-                config('powerschool.server_address'),
-                config('powerschool.client_id'),
-                config('powerschool.client_secret')
-            );
-        });
+        $this->app->bind(RequestBuilder::class, fn () => new RequestBuilder(
+            config('powerschool.server_address'),
+            config('powerschool.client_id'),
+            config('powerschool.client_secret')
+        ));
 
         $this->mergeConfigFrom(__DIR__ . '/config.php', 'powerschool');
     }
@@ -38,7 +36,7 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
         // Publish the configuration and migration
         $this->publishes([
             __DIR__ . '/config.php' => config_path('powerschool.php'),
-        ], 'config');
+        ], ['config', 'powerschool-config']);
 
         // Commands
         if ($this->app->runningInConsole()) {
@@ -54,7 +52,7 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [RequestBuilder::class];
     }

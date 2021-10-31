@@ -4,47 +4,34 @@ namespace GrantHolle\PowerSchool\Api;
 
 class Paginator
 {
-    protected int $page;
-    protected int $pageSize;
-    protected string $key;
+    protected int $page = 1;
 
     protected RequestBuilder $builder;
 
-    public function __construct(RequestBuilder $builder, int $page = 1, int $pageSize = 100, string $key = 'record')
+    public function __construct(RequestBuilder $builder, int $pageSize = 100)
     {
-        $this->builder = $builder;
-        $this->page = $page;
-        $this->pageSize = $pageSize;
-        $this->key = $key;
+        $this->builder = $builder->pageSize($pageSize);
     }
 
-    public function page()
+    public function page(): ?Response
     {
-        $this->builder->pageSize($this->pageSize)
-            ->page($this->page);
+        $results = $this->builder
+            ->page($this->page)
+            ->send(false);
 
-        $results = $this->builder->send(false);
+        // This means that PS sent back a single record
+        // and should be wrapped in an array
+        if (!$results->isEmpty() && !$results[0]) {
+            $results->setData([$results->data]);
+        }
 
-        if ($this->key === 'record') {
-            $records = $results->record ?? [];
-        } else {
-            // API endpoints are organized by {plural}->{singular}
-            // So something /course, is $response->courses->course = array
-            // When there aren't any results, it seems it's still {plural} just
-            // no singular key is present after that. Just one of many poor
-            // design choices of terrible software
-            $baseKey = $this->key . 's';
-            $records = $results->{$baseKey}->{$this->key} ?? [];
-
-            if (!is_array($records)) {
-                $records = [$records];
-            }
+        if ($results->isEmpty()) {
+            $this->page = 1;
+            return null;
         }
 
         $this->page += 1;
 
-        return empty($records)
-            ? false
-            : $records;
+        return $results;
     }
 }
