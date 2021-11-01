@@ -431,6 +431,45 @@ $results = PowerSchool::to('/ws/v1/district/school')
  }
 ```
 
+For `get` table listings, the results are nested awkwardly. For example,
+
+```php
+PowerSchool::table('u_my_table')->get();
+
+// This returns results like
+[
+    [
+        'id' => 1,
+        'tables' => [
+            'u_my_table' => [
+                'column' => '',
+                'column' => '',
+                // etc
+            ]
+        ]    
+    ],
+    // and on and on
+]
+```
+
+We can reduce the awkwardness of the results by calling `squashTableResponse()` on the `Response` object.
+
+```php
+PowerSchool::table('u_my_table')
+    ->get()
+    ->squashTableResponse();
+
+// Now the results will be simpler
+[
+    [
+        'column' => '',
+        'column' => '',
+        // etc
+    ],
+    // and on and on
+]
+```
+
 ## License
 
 [MIT](LICENSE)

@@ -59,6 +59,20 @@ class Response implements \Iterator, \ArrayAccess
         return $this;
     }
 
+    public function squashTableResponse(): static
+    {
+        if (!$this->tableName) {
+            return $this;
+        }
+
+        $this->data = array_map(
+            fn (array $datum) => $datum['tables'][$this->tableName],
+            $this->data
+        );
+
+        return $this;
+    }
+
     protected function setExt(array $data, string $property)
     {
         $this->$property = $this->splitCommaString(Arr::get($data, "@$property"));
