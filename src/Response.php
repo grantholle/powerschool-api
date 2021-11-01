@@ -17,15 +17,21 @@ class Response implements \Iterator, \ArrayAccess
     public function __construct(array $data, string $key)
     {
         $this->tableName = strtolower($data['name'] ?? null);
-        $this->setExt($data, 'expansions');
-        $this->setExt($data, 'extensions');
 
         $this->data = $this->inferData($data, strtolower($key));
     }
 
     protected function inferData(array $data, string $key): array
     {
-        unset($data['@expansions'], $data['@extensions']);
+        if (isset($data['@expansions'])) {
+            $this->setExt($data, 'expansions');
+            unset($data['@expansions']);
+        }
+
+        if (isset($data['@extensions'])) {
+            $this->setExt($data, 'extensions');
+            unset($data['@extensions']);
+        }
 
         if (empty($data)) {
             return [];
@@ -35,15 +41,12 @@ class Response implements \Iterator, \ArrayAccess
             return $data[$key];
         }
 
-        if ($nested = Arr::get($data, Str::plural($key))) {
-            $this->setExt($nested, 'expansions');
-            $this->setExt($nested, 'extensions');
+        if ($nested = Arr::get($data, $key . 's')) {
+            return $this->inferData($nested, $key);
+        }
 
-            if (isset($nested[$key])) {
-                return $nested[$key];
-            }
-
-            return [];
+        if (count(array_keys($data)) === 1) {
+            return $this->inferData(Arr::first($data), '');
         }
 
         return $data;
