@@ -3,6 +3,7 @@
 namespace GrantHolle\PowerSchool\Api\Facades;
 
 use GrantHolle\PowerSchool\Api\Request;
+use GrantHolle\PowerSchool\Api\Response;
 use Illuminate\Support\Facades\Facade;
 use GrantHolle\PowerSchool\Api\RequestBuilder;
 
@@ -21,7 +22,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder setId($id)
  * @method static RequestBuilder id($id)
  * @method static RequestBuilder forId($id)
- * @method static null|\stdClass|static resource(string $endpoint, string $method = null, array $data = [])
+ * @method static null|Response|static resource(string $endpoint, string $method = null, array $data = [])
  * @method static RequestBuilder excludeProjection()
  * @method static RequestBuilder withoutProjection()
  * @method static RequestBuilder setEndpoint(string $endpoint)
@@ -51,15 +52,15 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder count()
  * @method static RequestBuilder raw()
  * @method static RequestBuilder asResponse()
- * @method static \stdClass|null send()
+ * @method static Response|null send()
  * @method static RequestBuilder setMethod(string $method)
  * @method static RequestBuilder method(string $method)
- * @method static \stdClass|null get(string $endpoint = null)
- * @method static \stdClass|null post()
- * @method static \stdClass|null put()
- * @method static \stdClass|null patch()
- * @method static \stdClass|null delete()
- * @method static \stdClass|null getDataSubscriptionChanges(string $applicationName, int $version)
+ * @method static Response|null get(string $endpoint = null)
+ * @method static Response|null post()
+ * @method static Response|null put()
+ * @method static Response|null patch()
+ * @method static Response|null delete()
+ * @method static Response|null getDataSubscriptionChanges(string $applicationName, int $version)
  * @method static RequestBuilder includeCount()
  * @method static RequestBuilder page(int $page)
  * @method static RequestBuilder sort($columns, bool $descending = false)
