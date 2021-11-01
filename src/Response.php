@@ -3,6 +3,7 @@
 namespace GrantHolle\PowerSchool\Api;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Response implements \Iterator, \ArrayAccess
@@ -134,5 +135,38 @@ class Response implements \Iterator, \ArrayAccess
     public function __get(string $name)
     {
         return $this->data[$name] ?? null;
+    }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    public function toJson(): string
+    {
+        return json_encode($this->data);
+    }
+
+    public function collect(): Collection
+    {
+        return collect($this->data);
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'data' => $this->data,
+            'table_name' => $this->tableName,
+            'expansions' => $this->expansions,
+            'extensions' => $this->extensions,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->data = $data['data'] ?? [];
+        $this->tableName = $data['table_name'] ?? null;
+        $this->expansions = $data['expansions'] ?? [];
+        $this->extensions = $data['extensions'] ?? [];
     }
 }
