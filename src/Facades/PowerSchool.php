@@ -32,7 +32,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder setNamedQuery(string $query, array $data = [])
  * @method static RequestBuilder namedQuery(string $query, array $data = [])
  * @method static RequestBuilder powerQuery(string $query, array $data = [])
- * @method static RequestBuilder pq(string $query, array $data = [])
+ * @method static RequestBuilder|Response pq(string $query, array $data = [])
  * @method static RequestBuilder setData(array $data)
  * @method static RequestBuilder withData(array $data)
  * @method static RequestBuilder with(array $data)
