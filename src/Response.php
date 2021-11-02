@@ -4,7 +4,6 @@ namespace GrantHolle\PowerSchool\Api;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class Response implements \Iterator, \ArrayAccess
 {
@@ -19,6 +18,7 @@ class Response implements \Iterator, \ArrayAccess
         $this->tableName = strtolower($data['name'] ?? null);
 
         $this->data = $this->inferData($data, strtolower($key));
+        DebugLogger::log(fn () => ray($this->data)->purple()->label('Response data'));
     }
 
     protected function inferData(array $data, string $key): array

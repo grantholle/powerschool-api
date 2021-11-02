@@ -72,14 +72,14 @@ class Request
                     ->makeRequest($method, $endpoint, $options);
             }
 
-            ray($response->getStatusCode());
-            ray()->json($response->getBody()->getContents());
+            DebugLogger::log(fn () => ray()->json($response->getBody()->getContents())->red()->label($response->getStatusCode()));
 
             throw $exception;
         }
 
         $this->attempts = 0;
         $body = json_decode($response->getBody()->getContents(), true);
+        DebugLogger::log($body);
 
         if ($returnResponse) {
             return LaravelResponse::json($body, $response->getStatusCode());
