@@ -64,11 +64,20 @@ class Response implements \Iterator, \ArrayAccess
         if (!$this->tableName) {
             return $this;
         }
+        $isAssoc = Arr::isAssoc($this->data);
+
+        if ($isAssoc) {
+            $this->data = [$this->data];
+        }
 
         $this->data = array_map(
             fn (array $datum) => $datum['tables'][$this->tableName],
             $this->data
         );
+
+        if ($isAssoc) {
+            $this->data = Arr::first($this->data);
+        }
 
         return $this;
     }
