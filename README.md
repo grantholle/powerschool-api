@@ -40,6 +40,17 @@ Optionally, you can publish the config file to store the server address, client 
 php artisan vendor:publish --provider="GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider"
 ```
 
+## Debugging
+
+You can enable debugging with [Ray](https://myray.app/) that will display the raw and transformed responses for each request. This is helpful in viewing the response from PowerSchool and the `GrantHolle\PowerSchool\Api\Response` object's data. You will need to install the [Laravel package](https://spatie.be/docs/ray/v1/installation-in-your-project/laravel) and enable debugging:
+
+```
+# App debug needs to be enabled also
+APP_DEBUG=true
+
+POWERSCHOOL_DEBUG=true
+```
+
 ## Commands
 
 ```bash
