@@ -103,7 +103,7 @@ class Response implements \Iterator, \ArrayAccess
         return empty($this->data);
     }
 
-    public function current()
+    public function current(): mixed
     {
         $current = $this->data[$this->index] ?? null;
 
@@ -114,17 +114,17 @@ class Response implements \Iterator, \ArrayAccess
         return Arr::get($current, "tables.{$this->tableName}");
     }
 
-    public function next()
+    public function next(): void
     {
         $this->index++;
     }
 
-    public function key()
+    public function key(): int
     {
         return $this->index;
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->data[$this->index]);
     }
@@ -134,17 +134,17 @@ class Response implements \Iterator, \ArrayAccess
         $this->index = 0;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return Arr::get($this->data, $offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
             $this->data[] = $value;
@@ -153,12 +153,12 @@ class Response implements \Iterator, \ArrayAccess
         }
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }
 
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         return $this->data[$name] ?? null;
     }
