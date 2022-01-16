@@ -129,7 +129,7 @@ class Response implements \Iterator, \ArrayAccess
         return isset($this->data[$this->index]);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
     }
