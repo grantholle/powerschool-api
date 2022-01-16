@@ -103,6 +103,11 @@ class Response implements \Iterator, \ArrayAccess
         return empty($this->data);
     }
 
+    public function count(): int
+    {
+        return count($this->data);
+    }
+
     public function current(): mixed
     {
         $current = $this->data[$this->index] ?? null;
