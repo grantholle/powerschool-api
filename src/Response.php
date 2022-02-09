@@ -15,7 +15,7 @@ class Response implements \Iterator, \ArrayAccess
 
     public function __construct(array $data, string $key)
     {
-        $this->tableName = strtolower($data['name'] ?? null);
+        $this->tableName = strtolower($data['name'] ?? '');
 
         $this->data = $this->inferData($data, strtolower($key));
         DebugLogger::log(fn () => ray($this->data)->purple()->label('Response data'));
