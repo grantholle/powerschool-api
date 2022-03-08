@@ -407,26 +407,26 @@ while ($records = $builder->paginate(25)) {
 
 ## Responses
 
-Prior to `v3`, API requests returned a simple `stdClass` instance containing the raw response from PowerSchool. Since `v3`, there's a new `GrantHolle\PowerSchool\Api\Response` class that gets returned.
+Prior to `v3`, API requests returned a simple `stdClass` instance containing the raw response from PowerSchool. Since `v3`, there's a new `GrantHolle\PowerSchool\Api\Response` class that gets returned, which implements `ArrayAccess`. This gives you a more ergonomic way of handling the data that gets returned from PowerSchool. Depending on the request you're making, PowerSchool returns a variety of keys and data nesting. The new `Response` class attempts to normalize the data that gets returned, making it much simpler for you to process.
 
 ## Singular responses
 
-Some responses are meant to return a single record, such as a response for `/ws/contacts/contact/{id}`. For these responses, the properties can be accessed just like before.
+Some responses are meant to return a single record, such as a response for `/ws/contacts/contact/{id}`. For these responses, the properties can be accessed as an associative array.
 
 ```php
 $response = PowerSchool::to('/ws/contacts/contact/123')
     ->get();
 
-$response->contactId; // 123
+$response['contactId']; // 123
 ```
 
 The `@extensions` and `@expansions` fields will be parsed into `$extensions` and `$expansions` properties as arrays.
 
 ```php
 $response->extensions;
-//[
-//    "personcorefields",
-//]
+// [
+//   "personcorefields",
+// ]
 ```
 
 ## List responses
@@ -438,7 +438,7 @@ $results = PowerSchool::to('/ws/v1/district/school')
     ->get();
 
  foreach ($results as $result) {
-     // $result will be a school object
+     // $result will be an array representing the school object returned
  }
 ```
 
