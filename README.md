@@ -417,6 +417,7 @@ Some responses are meant to return a single record, such as a response for `/ws/
 $response = PowerSchool::to('/ws/contacts/contact/123')
     ->get();
 
+// Since Response implements ArrayAccess, we can access the attributes with keys
 $response['contactId']; // 123
 ```
 
