@@ -48,11 +48,10 @@ class Response implements \Iterator, \ArrayAccess
         if (count(array_keys($data)) === 1) {
             $first = Arr::first($data);
 
-            if (is_string($first)) {
-                return [$first];
+            // If this is an array, keep drilling
+            if (is_array($first)) {
+                return $this->inferData($first, '');
             }
-
-            return $this->inferData($first, '');
         }
 
         return $data;
