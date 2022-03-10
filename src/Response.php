@@ -8,8 +8,10 @@ use Illuminate\Support\Collection;
 class Response implements \Iterator, \ArrayAccess
 {
     public ?array $data;
+    public array $originalData = [];
     public array $expansions = [];
     public array $extensions = [];
+    public array $meta = [];
     protected int $index = 0;
     protected ?string $tableName;
 
@@ -23,14 +25,17 @@ class Response implements \Iterator, \ArrayAccess
 
     protected function inferData(array $data, string $key): array
     {
-        if (isset($data['@expansions'])) {
-            $this->setExt($data, 'expansions');
-            unset($data['@expansions']);
-        }
+        $keys = array_keys($data);
 
-        if (isset($data['@extensions'])) {
-            $this->setExt($data, 'extensions');
-            unset($data['@extensions']);
+        // Remove anything that isn't the desired key
+        // from data, but preserving as a property or meta
+        foreach ($keys as $dataKey) {
+            if ($dataKey === $key) {
+                continue;
+            }
+
+            $this->setMeta($data, $dataKey);
+            unset($data[$dataKey]);
         }
 
         if (empty($data)) {
@@ -64,6 +69,16 @@ class Response implements \Iterator, \ArrayAccess
         return $this;
     }
 
+    public function getOriginalData(): array
+    {
+        return $this->originalData;
+    }
+
+    public function getMeta(): array
+    {
+        return $this->meta;
+    }
+
     public function squashTableResponse(): static
     {
         if (!$this->tableName) {
@@ -87,9 +102,24 @@ class Response implements \Iterator, \ArrayAccess
         return $this;
     }
 
-    protected function setExt(array $data, string $property)
+    protected function setMeta(array $data, string $property): static
     {
-        $this->$property = $this->splitCommaString(Arr::get($data, "@$property"));
+        $clean = $this->cleanProperty($property);
+        $value = Arr::get($data, $property);
+
+        if (in_array($clean, ['extensions', 'expansions'])) {
+            $this->$clean = $this->splitCommaString($value);
+            return $this;
+        }
+
+        $this->meta[$clean] = $value;
+
+        return $this;
+    }
+
+    protected function cleanProperty(string $property): string
+    {
+        return preg_replace("/[^a-zA-Z0-9_]/u", '', $property);
     }
 
     protected function splitCommaString(?string $string): array

@@ -5,6 +5,7 @@ namespace Tests;
 use GrantHolle\PowerSchool\Api\PowerSchoolApiServiceProvider;
 use GrantHolle\PowerSchool\Api\Request;
 use GrantHolle\PowerSchool\Api\RequestBuilder;
+use GrantHolle\PowerSchool\Api\Response as ApiResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
@@ -237,5 +238,38 @@ class PowerSchoolTest extends TestCase
 
         $builder = $this->getRequestBuilderMock(null, $request);
         $builder->table('u_table')->id(1)->get();
+    }
+
+    public function test_response_can_infer_data()
+    {
+        $data = [
+            "name" => "users",
+            'record' => [
+                [
+                    "_name" => "users",
+                    "last_name" => "x",
+                    "teachernumber" => "x",
+                    "dcid" => "x",
+                    "schoolid" => "x",
+                ],
+                [
+                    "_name" => "users",
+                    "last_name" => "x",
+                    "dcid" => "x",
+                    "schoolid" => "x",
+                ],
+            ],
+            "@extensions" => "erpfields,userscorefields"
+        ];
+
+        $response = new ApiResponse($data, 'record');
+
+        $this->assertCount(2, $response);
+        $this->assertEquals(['erpfields', 'userscorefields'], $response->extensions);
+        $this->assertEquals(['name' => 'users'], $response->getMeta());
+
+        foreach ($response as $item) {
+            $this->assertArrayHasKey('dcid', $item);
+        }
     }
 }
