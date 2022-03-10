@@ -634,7 +634,7 @@ class RequestBuilder {
             return $this;
         }
 
-        $this->options['query'] = '';$this->options['query'] = '';
+        $this->options['query'] = '';
         $qs = [];
 
         // Build the query string
