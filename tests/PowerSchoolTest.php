@@ -240,7 +240,7 @@ class PowerSchoolTest extends TestCase
         $builder->table('u_table')->id(1)->get();
     }
 
-    public function test_response_can_infer_data()
+    public function test_response_can_infer_record_key_data()
     {
         $data = [
             "name" => "users",
@@ -270,6 +270,38 @@ class PowerSchoolTest extends TestCase
 
         foreach ($response as $item) {
             $this->assertArrayHasKey('dcid', $item);
+        }
+    }
+
+    public function test_response_can_infer_endpoint_key_data()
+    {
+        $data = [
+            'students' => [
+                'student' => [
+                    [
+                        "id" => "1",
+                        "local_id" => "1",
+                        "student_username" => "x",
+                    ],
+                    [
+                        "id" => "2",
+                        "local_id" => "2",
+                        "student_username" => "x",
+                    ],
+                ],
+                "@expansions" => "demographics, addresses, alerts, phones, school_enrollment, ethnicity_race, contact, contact_info, initial_enrollment, schedule_setup, fees, lunch, global_id",
+                "@extensions" => "u_prntrsvlunchwyis,u_docbox_extension,u_tienet_alerts,c_studentlocator,u_mba_report_cards,s_stu_crosslea_x,u_studentsuserfields,u_isc_passport_students,u_admissions_students_extension,u_powermenu_plus_extension,s_stu_crdc_x,s_stu_x,activities,u_re_enrollment_extension,u_students_extension,s_stu_ncea_x,s_stu_edfi_x,studentcorefields",
+            ],
+        ];
+
+        $response = new ApiResponse($data, 'student');
+
+        $this->assertCount(2, $response);
+        $this->assertNotEmpty($response->extensions);
+        $this->assertNotEmpty($response->expansions);
+
+        foreach ($response as $item) {
+            $this->assertArrayHasKey('local_id', $item);
         }
     }
 }

@@ -25,6 +25,14 @@ class Response implements \Iterator, \ArrayAccess
 
     protected function inferData(array $data, string $key): array
     {
+        if (empty($data)) {
+            return [];
+        }
+
+        if ($nested = Arr::get($data, $key . 's')) {
+            return $this->inferData($nested, $key);
+        }
+
         $keys = array_keys($data);
 
         // Remove anything that isn't the desired key
@@ -38,16 +46,8 @@ class Response implements \Iterator, \ArrayAccess
             unset($data[$dataKey]);
         }
 
-        if (empty($data)) {
-            return [];
-        }
-
         if (isset($data[$key])) {
             return $data[$key];
-        }
-
-        if ($nested = Arr::get($data, $key . 's')) {
-            return $this->inferData($nested, $key);
         }
 
         if (count(array_keys($data)) === 1) {
