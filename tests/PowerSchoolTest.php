@@ -304,4 +304,55 @@ class PowerSchoolTest extends TestCase
             $this->assertArrayHasKey('local_id', $item);
         }
     }
+
+    public function test_response_can_infer_single_endpoint_key_data()
+    {
+        $data = [
+            "school" => [
+                "@expansions" => "one, two, three",
+                "@extensions" => "one,two,three",
+                "id" => 10,
+                "name" => "My school name",
+                "school_number" => 100,
+                "low_grade" => 0,
+                "high_grade" => 12,
+                "alternate_school_number" => 0,
+                "addresses" => [],
+                "phones" => [],
+                "principal" => [],
+            ],
+        ];
+
+        $response = new ApiResponse($data, '10');
+
+        $this->assertCount(9, array_keys($response->toArray()));
+        $this->assertCount(3, $response->extensions);
+        $this->assertCount(3, $response->expansions);
+
+        $this->assertEquals($data['school']['name'], $response['name']);
+        $this->assertEquals($data['school']['school_number'], $response['school_number']);
+        $this->assertEquals($data['school']['high_grade'], $response['high_grade']);
+    }
+
+    public function test_response_can_infer_pq_key_data()
+    {
+        $data = [
+            "record" => [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            "@extensions" => "",
+        ];
+
+        $response = new ApiResponse($data, 'record');
+
+        $this->assertCount(3, $response);
+        $this->assertEmpty($response->extensions);
+        $this->assertEmpty($response->expansions);
+
+        foreach ($response as $item) {
+            $this->assertArrayHasKey('id', $item);
+        }
+    }
 }

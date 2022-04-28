@@ -13,11 +13,17 @@ class Response implements \Iterator, \ArrayAccess
     public array $extensions = [];
     public array $meta = [];
     protected int $index = 0;
+    protected bool $isSingleItem = false;
     protected ?string $tableName;
 
     public function __construct(array $data, string $key)
     {
         $this->tableName = strtolower($data['name'] ?? '');
+
+        $this->originalData = $data;
+
+        // For endpoint requests that end in a number
+        $this->isSingleItem = is_numeric($key) && count($data) === 1;
 
         $this->data = $this->inferData($data, strtolower($key));
         DebugLogger::log(fn () => ray($this->data)->purple()->label('Response data'));
@@ -38,7 +44,13 @@ class Response implements \Iterator, \ArrayAccess
         // Remove anything that isn't the desired key
         // from data, but preserving as a property or meta
         foreach ($keys as $dataKey) {
-            if ($dataKey === $key) {
+            if (
+                ($dataKey === $key) ||
+                (
+                    $this->isSingleItem &&
+                    !in_array($dataKey, ['@extensions', '@expansions'])
+                )
+            ) {
                 continue;
             }
 
