@@ -60,7 +60,7 @@ class RequestBuilder {
      */
     public function setTable(string $table): static
     {
-        $this->table = $table;
+        $this->table = Str::afterLast($table, '/');
         $this->endpoint = Str::startsWith($table, '/')
             ? $table
             : '/ws/schema/table/' . $table;
