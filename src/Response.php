@@ -2,10 +2,12 @@
 
 namespace GrantHolle\PowerSchool\Api;
 
+use ArrayAccess;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Iterator;
 
-class Response implements \Iterator, \ArrayAccess
+class Response implements Iterator, ArrayAccess
 {
     public ?array $data;
     public array $originalData = [];
