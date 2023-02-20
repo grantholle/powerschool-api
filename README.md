@@ -4,6 +4,11 @@ Taking inspiration from Laravel's database and Eloquent `Builder` class, this al
 
 This package is to be used with alongside a PowerSchool plugin that has enabled `<oauth/>` in the `plugin.xml`. This guide assumes you have PowerSchool API and plugin knowledge and does not cover the details of a plugin or its API.
 
+## Breaking changes for v4
+
+- Requires PHP ^8.1
+- Requires Laravel ^10.0
+
 ## Breaking changes for v3
 
 - Requires PHP ^8.0
