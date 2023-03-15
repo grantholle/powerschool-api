@@ -41,7 +41,10 @@
         "laravel": {
             "providers": [
                 "GrantHolle\\PowerSchool\\Api\\PowerSchoolApiServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "PowerSchool": "GrantHolle\\PowerSchool\\Api\\Facades\\PowerSchool"
+            }
         }
     }
 }
