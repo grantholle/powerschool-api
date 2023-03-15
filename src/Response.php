@@ -48,6 +48,7 @@ class Response implements Iterator, ArrayAccess
         foreach ($keys as $dataKey) {
             if (
                 ($dataKey === $key) ||
+                is_numeric($dataKey) ||
                 (
                     $this->isSingleItem &&
                     !in_array($dataKey, ['@extensions', '@expansions'])

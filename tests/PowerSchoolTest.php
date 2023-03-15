@@ -334,6 +334,68 @@ class PowerSchoolTest extends TestCase
         $this->assertEquals($data['school']['high_grade'], $response['high_grade']);
     }
 
+    public function test_response_can_infer_students_contact_response()
+    {
+        $data = [
+            [
+                "contactId" => 1,
+                "firstName" => 'John',
+                "middleName" => null,
+                "lastName" => 'Doe',
+                "prefix" => null,
+                "suffix" => null,
+                "gender" => null,
+                "employer" => null,
+                "stateContactNumber" => null,
+                "contactNumber" => null,
+                "stateExcludeFromReporting" => false,
+                "active" => true,
+                "emails" => [],
+                "phones" => [],
+                "language" => null,
+                "contactAccount" => [],
+                "addresses" => [],
+                "contactStudents" => [],
+                "mergedIds" => [],
+                "mergeAccountId" => null,
+                "@extensions" => "personcorefields",
+            ],
+            [
+                "contactId" => 2,
+                "firstName" => 'Jane',
+                "middleName" => null,
+                "lastName" => 'Doe',
+                "prefix" => null,
+                "suffix" => null,
+                "gender" => null,
+                "employer" => null,
+                "stateContactNumber" => null,
+                "contactNumber" => null,
+                "stateExcludeFromReporting" => false,
+                "active" => true,
+                "emails" => [],
+                "phones" => [],
+                "language" => null,
+                "contactAccount" => null,
+                "addresses" => [],
+                "contactStudents" => [],
+                "mergedIds" => [],
+                "mergeAccountId" => null,
+                "@extensions" => "personcorefields",
+            ]
+        ];
+
+        $response = new ApiResponse($data, 123);
+
+        $this->assertCount(2, array_keys($response->toArray()));
+        $this->assertCount(0, $response->extensions);
+        $this->assertCount(0, $response->expansions);
+
+        foreach ($response as $item) {
+            $this->assertArrayHasKey('contactId', $item);
+        }
+    }
+
     public function test_response_can_infer_pq_key_data()
     {
         $data = [
