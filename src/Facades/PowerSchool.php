@@ -4,6 +4,7 @@ namespace GrantHolle\PowerSchool\Api\Facades;
 
 use GrantHolle\PowerSchool\Api\Request;
 use GrantHolle\PowerSchool\Api\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Facade;
 use GrantHolle\PowerSchool\Api\RequestBuilder;
 
@@ -52,7 +53,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder count()
  * @method static RequestBuilder raw()
  * @method static RequestBuilder asResponse()
- * @method static Response|null send()
+ * @method static Response|JsonResponse|null send()
  * @method static RequestBuilder setMethod(string $method)
  * @method static RequestBuilder method(string $method)
  * @method static Response|null get(string $endpoint = null)

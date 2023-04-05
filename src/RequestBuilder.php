@@ -2,6 +2,7 @@
 
 namespace GrantHolle\PowerSchool\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use stdClass;
 
@@ -722,7 +723,7 @@ class RequestBuilder {
     /**
      * Sends the request to PowerSchool
      */
-    public function send(bool $reset = true): Response
+    public function send(bool $reset = true): Response|JsonResponse|null
     {
         $this->buildRequestJson()
             ->buildRequestQuery();
@@ -734,6 +735,11 @@ class RequestBuilder {
                 $this->options,
                 $this->asJsonResponse
             );
+
+        if ($responseData instanceof JsonResponse) {
+            return $responseData;
+        }
+
         $response = new Response($responseData, $this->pageKey);
 
         if ($reset) {
