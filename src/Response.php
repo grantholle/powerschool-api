@@ -28,6 +28,8 @@ class Response implements Iterator, ArrayAccess
         $this->isSingleItem = is_numeric($key) && count($data) === 1;
 
         $this->data = $this->inferData($data, strtolower($key));
+        DebugLogger::log(fn () => ray($key)->purple()->label('Guessed key'));
+        DebugLogger::log(fn () => ray($this->originalData)->purple()->label('Original data'));
         DebugLogger::log(fn () => ray($this->data)->purple()->label('Response data'));
     }
 

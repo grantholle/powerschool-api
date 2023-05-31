@@ -60,6 +60,8 @@ class Request
         // Throw exceptions for 4xx and 5xx errors
         $options['http_errors'] = true;
 
+        DebugLogger::log(fn () => ray($endpoint, $options)->red()->label("Request meta [{$method}]"));
+
         try {
             $response = $this->getClient()
                 ->request($method, $endpoint, $options);
