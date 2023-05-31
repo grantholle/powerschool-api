@@ -43,6 +43,12 @@ class Response implements Iterator, ArrayAccess
 
         $keys = array_keys($data);
 
+        // Check to see if every key is numeric.
+        // If it is, then keep the original data as-is.
+        if (count(array_filter($keys, 'is_numeric')) === count($keys)) {
+            return $data;
+        }
+
         // Remove anything that isn't the desired key
         // from data, but preserving as a property or meta
         foreach ($keys as $dataKey) {
@@ -65,7 +71,7 @@ class Response implements Iterator, ArrayAccess
             return $data[$key];
         }
 
-        if (count(array_keys($data)) === 1) {
+        if (count(array_keys($keys)) === 1) {
             $first = Arr::first($data);
 
             // If this is an array, keep drilling

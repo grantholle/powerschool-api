@@ -396,6 +396,49 @@ class PowerSchoolTest extends TestCase
         }
     }
 
+    public function test_response_can_infer_contacts_single_student_response()
+    {
+        $data = [
+            [
+                "deleted" => false,
+                "studentContactId" => 1,
+                "sequence" => 1,
+                "dcid" => 1,
+                "studentNumber" => "28014473",
+                "firstName" => "John",
+                "middleName" => null,
+                "lastName" => "Smith",
+                "schoolAbbr" => "School",
+                "schoolNumber" => 1,
+                "originalContactType" => null,
+                "autosendHowOften" => null,
+                "emailSummary" => null,
+                "assignmentDetails" => null,
+                "attendanceDetails" => null,
+                "schoolAnnouncements" => null,
+                "balanceAlert" => null,
+                "notificationEmails" => null,
+                "userHasAccess" => null,
+                "contactStudentAssocExtension" => [],
+                "sendNow" => false,
+                "canAccessData" => true,
+                "guardianId" => 1,
+                'restrictions' => [],
+                'studentDetails' => [],
+            ]
+        ];
+
+        $response = new ApiResponse($data, 'students');
+
+        $this->assertCount(1, array_keys($response->toArray()));
+        $this->assertCount(0, $response->extensions);
+        $this->assertCount(0, $response->expansions);
+
+        foreach ($response as $item) {
+            $this->assertArrayHasKey('studentContactId', $item);
+        }
+    }
+
     public function test_response_can_infer_pq_key_data()
     {
         $data = [
