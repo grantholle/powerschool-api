@@ -460,4 +460,28 @@ class PowerSchoolTest extends TestCase
             $this->assertArrayHasKey('id', $item);
         }
     }
+
+    public function test_response_can_infer_results_response()
+    {
+        $data = [
+            'results' => [
+                'insert_count' => 1,
+                'update_count' => 0,
+                'delete_count' => 0,
+                'result' => [
+                    'client_uid' => 1,
+                    'status' => 'SUCCESS',
+                    'action' => 'INSERT',
+                    'success_message' => [
+                        'id' => 100,
+                        'ref' => 'https://powerschool.example.com/ws/v1/student/100',
+                    ],
+                ]
+            ]
+        ];
+
+        $response = new ApiResponse($data, 'student');
+        $this->assertTrue(isset($response['insert_count']));
+        $this->assertEquals(100, $response['result']['success_message']['id']);
+    }
 }

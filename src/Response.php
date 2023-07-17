@@ -39,6 +39,12 @@ class Response implements Iterator, ArrayAccess
             return [];
         }
 
+        // Check for the results key early,
+        // which would be the case for non-get requests
+        if (isset($data['results'])) {
+            return $data['results'];
+        }
+
         if ($nested = Arr::get($data, $key . 's')) {
             return $this->inferData($nested, $key);
         }
