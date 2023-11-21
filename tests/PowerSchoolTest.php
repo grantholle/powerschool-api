@@ -325,7 +325,7 @@ class PowerSchoolTest extends TestCase
 
         $response = new ApiResponse($data, '10');
 
-        $this->assertCount(9, array_keys($response->toArray()));
+        $this->assertCount(11, array_keys($response->toArray()));
         $this->assertCount(3, $response->extensions);
         $this->assertCount(3, $response->expansions);
 

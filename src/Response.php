@@ -72,7 +72,6 @@ class Response implements Iterator, ArrayAccess
             }
 
             $this->setMeta($data, $dataKey);
-            unset($data[$dataKey]);
         }
 
         if (isset($data[$key])) {
