@@ -42,7 +42,6 @@ class PowerSchoolApiServiceProvider extends ServiceProvider
         // Commands
         if ($this->app->runningInConsole()) {
             $this->commands([
-                ClearCache::class,
                 Authenticate::class
             ]);
         }
