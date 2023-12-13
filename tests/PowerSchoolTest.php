@@ -266,7 +266,6 @@ class PowerSchoolTest extends TestCase
 
         $this->assertCount(2, $response);
         $this->assertEquals(['erpfields', 'userscorefields'], $response->extensions);
-        $this->assertEquals(['name' => 'users'], $response->getMeta());
 
         foreach ($response as $item) {
             $this->assertArrayHasKey('dcid', $item);
@@ -325,7 +324,7 @@ class PowerSchoolTest extends TestCase
 
         $response = new ApiResponse($data, '10');
 
-        $this->assertCount(11, array_keys($response->toArray()));
+        $this->assertCount(9, array_keys($response->toArray()));
         $this->assertCount(3, $response->extensions);
         $this->assertCount(3, $response->expansions);
 
@@ -483,5 +482,36 @@ class PowerSchoolTest extends TestCase
         $response = new ApiResponse($data, 'student');
         $this->assertTrue(isset($response['insert_count']));
         $this->assertEquals(100, $response['result']['success_message']['id']);
+    }
+
+    public function test_response_can_infer_contacts_response()
+    {
+        $data = [
+            "contactId" => 1,
+            "firstName" => "John",
+            "middleName" => null,
+            "lastName" => "Doe",
+            "prefix" => null,
+            "suffix" => null,
+            "gender" => null,
+            "employer" => null,
+            "stateContactNumber" => null,
+            "contactNumber" => null,
+            "stateExcludeFromReporting" => false,
+            "active" => true,
+            "emails" => [],
+            "phones" => [],
+            "language" => null,
+            "contactAccount" => [],
+            "addresses" => [],
+            "contactStudents" => [],
+            "mergedIds" => [],
+            "mergeAccountId" => null,
+            "@extensions" => "integration_person,personcorefields",
+        ];
+
+        $response = new ApiResponse($data, 1);
+        $this->assertTrue(isset($response['firstName']));
+        $this->assertEquals('John', $response['firstName']);
     }
 }

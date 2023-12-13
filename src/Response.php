@@ -59,23 +59,10 @@ class Response implements Iterator, ArrayAccess
 
         // Remove anything that isn't the desired key
         // from data, but preserving as a property or meta
-        foreach ($keys as $dataKey) {
-            if (
-                ($dataKey === $key) ||
-                is_numeric($dataKey) ||
-                (
-                    $this->isSingleItem &&
-                    !in_array($dataKey, ['@extensions', '@expansions'])
-                )
-            ) {
-                continue;
-            }
-
+        $meta = ['@extensions', '@expansions'];
+        foreach ($meta as $dataKey) {
             $this->setMeta($data, $dataKey);
-
-            if (!$this->isSingleItem) {
-                unset($data[$dataKey]);
-            }
+            unset($data[$dataKey]);
         }
 
         if (isset($data[$key])) {
