@@ -93,7 +93,7 @@ $request = PowerSchool::table('u_my_custom_table')->forId(100);
 
 #### `setMethod(string $method)`
 
-_Aliases: method(), get(), post(), put(), patch(), delete()_
+_Aliases: usingMethod(), get(), post(), put(), patch(), delete()_
 
 Sets the HTTP verb for the request. When using the functions `get()`, `post()`, `put()`, `patch()`, or `delete()`, the request is sent automatically.
 

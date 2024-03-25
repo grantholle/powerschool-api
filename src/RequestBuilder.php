@@ -669,9 +669,19 @@ class RequestBuilder {
     }
 
     /**
-     * Alias for setMethod()
+     * @see setMethod()
      */
     public function method(string $method): static
+    {
+        trigger_error('method() is deprecated, use setMethod() or usingMethod() instead.', E_USER_DEPRECATED);
+
+        return $this->setMethod($method);
+    }
+
+    /**
+     * @see setMethod()
+     */
+    public function usingMethod(string $method): static
     {
         return $this->setMethod($method);
     }
