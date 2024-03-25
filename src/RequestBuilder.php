@@ -669,7 +669,7 @@ class RequestBuilder {
     }
 
     /**
-     * @see setMethod()
+     * @deprecated
      */
     public function method(string $method): static
     {
