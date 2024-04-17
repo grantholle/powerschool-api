@@ -130,7 +130,7 @@ class Request
         $this->authToken = $json->access_token;
 
         if ($this->cacheKey) {
-            Cache::put($this->cacheKey, $this->authToken, now()->addSeconds($json->expires_in));
+            Cache::put($this->cacheKey, $this->authToken, now()->addSeconds((int) $json->expires_in));
         }
 
         return $this;
