@@ -126,7 +126,7 @@ class RequestBuilder {
      * Configures the request to be a core resource with optional method and data that
      * will send the request automatically.
      */
-    public function resource(string $endpoint, string $method = null, array $data = []): null|Response|static
+    public function resource(string $endpoint, ?string $method = null, array $data = []): null|Response|static
     {
         $this->endpoint = $endpoint;
         $this->includeProjection = false;
@@ -311,8 +311,6 @@ class RequestBuilder {
         } else {
             parse_str($queryString, $this->queryString);
         }
-
-        $this->queryString = $queryString;
 
         return $this;
     }
@@ -689,7 +687,7 @@ class RequestBuilder {
     /**
      * Sets method to get, sugar around setMethod(), then sends the request
      */
-    public function get(string $endpoint = null): Response
+    public function get(?string $endpoint = null): Response
     {
         if ($endpoint) {
             $this->setEndpoint($endpoint);
