@@ -3,10 +3,7 @@
 namespace GrantHolle\PowerSchool\Api;
 
 use GrantHolle\PowerSchool\Api\Commands\Authenticate;
-use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use GrantHolle\PowerSchool\Api\Commands\ClearCache;
 
 class PowerSchoolApiServiceProvider extends ServiceProvider
 {

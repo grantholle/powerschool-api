@@ -119,7 +119,7 @@ class PowerSchoolTest extends TestCase
         $q = 'column1==value;column2==value';
 
         $builder->table($table)
-            ->method('get')
+            ->setMethod('get')
             ->projection(['id', 'column1', 'column2'])
             ->pageSize(5)
             ->q($q)
