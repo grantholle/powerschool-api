@@ -55,7 +55,7 @@ use GrantHolle\PowerSchool\Api\RequestBuilder;
  * @method static RequestBuilder asResponse()
  * @method static Response|JsonResponse|null send()
  * @method static RequestBuilder setMethod(string $method)
- * @method static RequestBuilder method(string $method)
+ * @method static RequestBuilder usingMethod(string $method)
  * @method static Response|null get(string $endpoint = null)
  * @method static Response|null post()
  * @method static Response|null put()
@@ -80,7 +80,7 @@ class PowerSchool extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return RequestBuilder::class;
     }
